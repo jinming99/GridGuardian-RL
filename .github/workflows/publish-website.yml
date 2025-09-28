@@ -1,0 +1,51 @@
+name: Publish Quarto Website
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'website/**'
+      - 'tutorials/**'
+      - 'algorithms/**'
+      - '**/*.md'
+      - '**/*.qmd'
+      - '.github/workflows/publish-website.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: latest
+
+      # Optional: Setup Pandoc (Quarto bundles Pandoc; keep if you need a specific version)
+      #- name: Setup Pandoc
+      #  uses: r-lib/actions/setup-pandoc@v2
+      #  with:
+      #    pandoc-version: '3.1'
+
+      - name: Render website
+        uses: quarto-dev/quarto-actions/render@v2
+        with:
+          path: website
+
+      - name: Publish to GitHub Pages (gh-pages)
+        uses: quarto-dev/quarto-actions/publish@v2
+        with:
+          target: gh-pages
+          path: website
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
