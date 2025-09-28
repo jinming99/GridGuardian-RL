@@ -1,0 +1,47 @@
+---
+title: "Tutorial 02: Baseline Controllers"
+sidebar: tutorials
+---
+
+## Overview
+
+This tutorial implements and evaluates baseline control strategies for EV charging. These baselines serve as performance benchmarks for reinforcement learning algorithms and provide insight into the problem structure.
+
+## Learning Objectives
+
+- Implement greedy and random baseline controllers
+- Develop Model Predictive Control (MPC) with rolling horizon optimization
+- Compute offline optimal solution with perfect information
+- Compare controller performance across multiple metrics
+- Establish trajectory logging and caching infrastructure
+
+## Resources
+
+### Jupyter Notebook
+[**View on GitHub**](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/02_ev_baselines_and_trajectories.ipynb)
+
+### Supporting Materials
+- [Python Script](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/02_ev_baselines_and_trajectories.py) - Jupytext paired version
+- [Technical Notes](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/02_ev_baselines_traj_debug.md) - Implementation details
+
+## Key Algorithms
+
+- **Greedy**: Maximizes immediate reward without lookahead
+- **Random**: Uniform random actions for statistical baseline
+- **MPC**: Solves finite-horizon optimization problem at each step
+- **Offline Optimal**: Solves entire episode with perfect future knowledge
+
+## Prerequisites
+
+```python
+from algorithms.evcharging.baselines import GreedyPolicy, MPCPolicy, OfflineOptimal
+from tutorials.utils import save_timeseries, evaluate_policy
+```
+
+## Duration
+
+Approximately 45 minutes
+
+## Acknowledgments
+
+MPC implementation based on convex optimization formulations from Lee et al. (2019) ACN research.

@@ -1,0 +1,48 @@
+---
+title: "Tutorial 03: Standard RL and Robustness"
+sidebar: tutorials
+---
+
+## Overview
+
+This tutorial implements standard reinforcement learning algorithms (PPO and SAC) for EV charging control. The focus is on training robust policies that maintain performance under observation and action noise.
+
+## Learning Objectives
+
+- Implement Proximal Policy Optimization (PPO) with actor-critic architecture
+- Develop Soft Actor-Critic (SAC) for continuous control
+- Evaluate policy robustness under various noise conditions
+- Integrate LSTM networks for temporal dependencies
+- Apply gradient regularization techniques (optional GRPO extensions)
+
+## Resources
+
+### Jupyter Notebook
+[**View on GitHub**](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/03_ev_standard_rl_robustnes.ipynb)
+
+### Supporting Materials
+- [Python Script](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/03_ev_standard_rl_robustnes.py) - Jupytext paired version
+- [Technical Notes](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/03_ev_standard_rl_robustnes.md) - Algorithm details
+
+## Implementation Details
+
+- **PPO**: Clipped objective with GAE advantage estimation
+- **SAC**: Maximum entropy framework with automatic temperature tuning
+- **Robustness**: Grid search over observation/action noise levels
+- **Memory**: LSTM integration for partial observability
+
+## Prerequisites
+
+```python
+from tutorials.utils.rl import RolloutBuffer, layer_init
+from tutorials.utils.ev import sweep_noise, plot_robustness_heatmap
+import torch.nn as nn
+```
+
+## Duration
+
+Approximately 60 minutes
+
+## Acknowledgments
+
+Based on CleanRL implementations and Stable-Baselines3 design patterns.

@@ -1,0 +1,317 @@
+---
+title: "Diagnostics"
+sidebar: api
+---
+
+## Constraint Analysis
+
+### `pilot_signals_df`
+
+Extract charging rates as DataFrame.
+
+```python
+pilot_signals_df(env) -> pd.DataFrame
+```
+
+**Returns:** DataFrame with columns ['t', 'station', 'amps']
+
+---
+
+### `constraint_slack_t`
+
+Compute constraint violations at specific timestep.
+
+```python
+magnitudes, slack = constraint_slack_t(env, t_index=50)
+```
+
+**Returns:**
+- `magnitudes`: Constraint limits (A)
+- `slack`: Available margin (A)
+
+---
+
+### `constraint_slack_series`
+
+Full episode constraint analysis.
+
+```python
+magnitudes, slacks = constraint_slack_series(env)
+# Shape: [T, num_constraints]
+```
+
+---
+
+### `get_constraint_binding_stats`
+
+Statistical analysis of constraint activity.
+
+```python
+stats = get_constraint_binding_stats(
+    env,
+    threshold=5.0  # Amps from limit to consider "binding"
+)
+```
+
+**Returns Dictionary:**
+- `binding_frequency`: Per-constraint activation rate
+- `temporal_pattern`: Time-of-day binding distribution
+- `violation_count`: Number of violations
+- `critical_constraints`: Most frequently binding
+
+---
+
+## Policy Analysis
+
+### `get_policy_diagnostics`
+
+Comprehensive policy behavioral analysis.
+
+```python
+diagnostics = get_policy_diagnostics(
+    policy_fn=policy,
+    env=env,
+    num_samples=100,
+    thresholds=(0.001, 0.999)
+)
+```
+
+**Returns:**
+- Action distribution statistics
+- Saturation rates (low/high)
+- Policy entropy
+- Response patterns
+
+---
+
+### `compare_policies`
+
+Side-by-side policy comparison.
+
+```python
+comparison_df = compare_policies(
+    policies={'PPO': ppo_policy, 'SAC': sac_policy},
+    env_factory=make_env,
+    diagnostic_fn=get_policy_diagnostics
+)
+```
+
+---
+
+### `policy_behavior_fingerprint`
+
+Generate unique behavioral signature.
+
+```python
+fingerprint = policy_behavior_fingerprint(
+    policy_fn=policy,
+    env_fn=make_env,
+    n_samples=100,
+    seed=0
+)
+```
+
+**Fingerprint Components:**
+- Action statistics
+- Station correlation patterns
+- Temporal response profile
+
+---
+
+## Visualization
+
+### `interactive_critical_timeline`
+
+Interactive Plotly timeline with critical windows.
+
+```python
+interactive_critical_timeline(
+    trajectory=trajectory,
+    env=env,
+    policy_fn=policy,
+    window_size=12,
+    top_k=5
+)
+```
+
+**Features:**
+- Click-to-navigate timeline
+- Automatic critical period detection
+- State inspection panels
+- Safety metric overlays
+
+---
+
+### `algorithm_arena`
+
+Real-time algorithm comparison.
+
+```python
+algorithm_arena(
+    algorithms={'PPO': ppo, 'SAC': sac},
+    env_fn=make_env,
+    seed=42,
+    max_steps=288,
+    metrics_to_track=['reward', 'excess_charge']
+)
+```
+
+**Displays:**
+- Synchronized environment playback
+- Per-algorithm action heatmaps
+- Cumulative performance curves
+- Safety violation tracking
+
+---
+
+### `animate_policy_evolution`
+
+Visualize learning progress.
+
+```python
+animate_policy_evolution(
+    checkpoints=[model_100, model_500, model_1000],
+    env_fn=make_env,
+    episodes_per_checkpoint=1,
+    interval=500  # milliseconds
+)
+```
+
+---
+
+## Safety Analysis
+
+### `analyze_violation_patterns`
+
+Correlate violations with environmental factors.
+
+```python
+patterns = analyze_violation_patterns(env, trajectory)
+```
+
+**Analysis Includes:**
+- Violation vs. demand correlation
+- Time-of-day patterns
+- MOER relationship
+- Action saturation correlation
+
+---
+
+### `test_safety_robustness`
+
+Systematic safety evaluation under perturbations.
+
+```python
+robustness_results = test_safety_robustness(
+    policy_fn=safe_policy,
+    env_fn=make_env,
+    cost_limit=25.0,
+    perturbations={
+        'obs_noise': [0.0, 0.1, 0.2],
+        'action_noise': [0.0, 0.05],
+        'demand_scale': [1.0, 1.5, 2.0]
+    }
+)
+```
+
+**Returns:** Safety rate under each perturbation configuration.
+
+---
+
+### `compute_safety_pareto_frontier`
+
+Map cost-reward trade-off curve.
+
+```python
+pareto_df = compute_safety_pareto_frontier(
+    policy_fn=policy,
+    env_fn=make_env,
+    lambda_values=np.logspace(-2, 2, 20)
+)
+```
+
+---
+
+## Critical Windows
+
+### `find_critical_windows_from_series`
+
+Identify high-stress periods.
+
+```python
+windows, slack = find_critical_windows_from_series(
+    moer=moer_series,
+    agg_demand=demand_series,
+    slack=slack_series,
+    topk=3,
+    window=12
+)
+```
+
+**Returns:** List of (start, end) indices for critical periods.
+
+---
+
+## Advanced Metrics
+
+### `plot_slack_from_env`
+
+Constraint slack visualization.
+
+```python
+plot_slack_from_env(
+    env,
+    trajectory,
+    constraints_to_show=['transformer_1', 'feeder_A']
+)
+```
+
+---
+
+### `get_action_entropy`
+
+Measure policy stochasticity.
+
+```python
+entropy = get_action_entropy(
+    policy_fn=policy,
+    obs_samples=observations,
+    n_action_samples=100
+)
+```
+
+---
+
+## Debugging Utilities
+
+### `trace_reward_components`
+
+Decompose reward signal.
+
+```python
+components = trace_reward_components(
+    env,
+    trajectory,
+    breakdown_keys=['profit', 'carbon_cost', 'excess_charge']
+)
+```
+
+---
+
+### `detect_mode_collapse`
+
+Identify degenerate policies.
+
+```python
+is_collapsed, metrics = detect_mode_collapse(
+    policy_fn=policy,
+    env_fn=make_env,
+    n_episodes=10,
+    variance_threshold=0.01
+)
+```
+
+**Detection Criteria:**
+- Low action variance
+- High saturation rates
+- Minimal exploration

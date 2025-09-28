@@ -1,0 +1,47 @@
+---
+title: "Tutorial 04: Safe RL with CMDPs"
+sidebar: tutorials
+---
+
+## Overview
+
+This tutorial implements safe reinforcement learning algorithms using Constrained Markov Decision Processes (CMDPs). The focus is on maintaining constraint satisfaction during both training and deployment through Lagrangian methods.
+
+## Learning Objectives
+
+- Formulate the EV charging problem as a CMDP
+- Implement PPO-Lagrangian with adaptive dual variables
+- Analyze cost-return Pareto frontiers
+- Monitor dual variable dynamics during training
+- Compare PID and adaptive Lagrangian variants
+
+## Resources
+
+### Jupyter Notebook
+[**View on GitHub**](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/04_ev_safe_rl_cmdp.ipynb)
+
+### Supporting Materials
+- [Python Script](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/04_ev_safe_rl_cmdp.py) - Jupytext paired version
+- [Technical Notes](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/04_ev_safe_rl_constrained_mdp.md) - CMDP theory
+
+## Key Concepts
+
+- **Cost Signal**: Excess charging beyond demand as constraint violation
+- **Lagrangian Relaxation**: Converting constrained to unconstrained optimization
+- **Dual Updates**: Adaptive penalty coefficient based on constraint satisfaction
+- **Safety Guarantees**: Theoretical bounds on constraint violations
+
+## Prerequisites
+
+```python
+from tutorials.utils.safe_rl import LagrangianMultiplier, SafeRolloutBuffer
+from tutorials.utils.ev import plot_cost_return_pareto, plot_dual_dynamics
+```
+
+## Duration
+
+Approximately 60 minutes
+
+## Acknowledgments
+
+Based on Achiam et al. (2017) CPO and Ray et al. (2019) PPO-Lagrangian formulations.

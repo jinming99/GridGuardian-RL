@@ -1,0 +1,74 @@
+---
+title: "Home"
+---
+
+<div class="hero-group hero--renewable-intel" role="region" aria-label="Hero section: Renewable Intelligence">
+  <div class="hero-layers">
+
+    <!-- BACK: Hills / horizon -->
+    <svg class="layer layer--back hills-bg" viewBox="0 0 1200 500" aria-hidden="true">
+      <path fill="currentColor" d="M0 380C140 340 240 360 360 380c160 28 260 -40 420 -60c140 -18 260 40 420 80V500H0Z" />
+    </svg>
+
+    <!-- MID: Turbines + solar (simple icons) -->
+    <svg class="layer layer--mid svg-fixed" viewBox="0 0 1200 300" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-opacity=".85" stroke-width="2">
+        <!-- turbines (x3) -->
+        <g transform="translate(260,180)">
+          <path d="M0 0l0 90" />
+          <path d="M0 0l-34 -20" /><path d="M0 0l34 -20" /><path d="M0 0l0 -38" />
+        </g>
+        <g transform="translate(460,160) scale(1.1)">
+          <path d="M0 0l0 90" />
+          <path d="M0 0l-34 -20" /><path d="M0 0l34 -20" /><path d="M0 0l0 -38" />
+        </g>
+        <g transform="translate(680,190) scale(.95)">
+          <path d="M0 0l0 90" />
+          <path d="M0 0l-34 -20" /><path d="M0 0l34 -20" /><path d="M0 0l0 -38" />
+        </g>
+
+        <!-- solar array -->
+        <g transform="translate(900,210)">
+          <rect x="0" y="0" width="120" height="28" rx="3"/>
+          <path d="M20 0v28M40 0v28M60 0v28M80 0v28M100 0v28"/>
+          <path d="M0 28l-14 20M120 28l14 20M-14 48h148"/>
+        </g>
+      </g>
+    </svg>
+
+    <!-- FRONT: AI + Cloud pictogram -->
+    <div class="layer layer--front hero-foreground">
+      <svg class="badge" viewBox="0 0 96 72" aria-hidden="true">
+        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M20 46h56a10 10 0 0 0 0 -20a12 12 0 0 0 -18 -10a14 14 0 0 0 -26 8a12 12 0 0 0 -12 12a10 10 0 0 0 0 10z"/>
+          <rect x="12" y="50" width="72" height="10" rx="2"/>
+          <path d="M24 55h8M64 55h8"/>
+          <rect x="30" y="28" width="10" height="14" rx="2"/>
+          <rect x="46" y="28" width="10" height="14" rx="2"/>
+          <rect x="62" y="28" width="10" height="14" rx="2"/>
+        </g>
+      </svg>
+
+      <h1>Renewable Intelligence</h1>
+      <p class="sub">AI that optimizes wind, solar, and storage—while respecting safety and reliability constraints.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="tutorial/index.html">Start the Tutorial</a>
+        <a class="btn btn-outline-light" href="demos/index.html">View Demos</a>
+        <a class="btn btn-outline-light" href="resources.html">Slides &amp; Code</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Cleaner and safer</h2>
+  <div class="cards">
+    <div class="card"><h3>Grid-Friendly RL</h3><p>Respect limits on voltage, frequency, and power flows.</p></div>
+    <div class="card"><h3>Uncertainty-Aware</h3><p>Make robust decisions under renewables variability.</p></div>
+    <div class="card"><h3>Resilience</h3><p>Recover quickly from faults and disturbances.</p></div>
+  </div>
+</div>
+
+<!-- Optional richer CC0 icons you can swap -->
+<!-- CC0 wind turbine: https://www.svgrepo.com/svg/489975/wind-turbine -->
+<!-- CC0 solar panel: https://www.svgrepo.com/svg/494067/solar-panel -->

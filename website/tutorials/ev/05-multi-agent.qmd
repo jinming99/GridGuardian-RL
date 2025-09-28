@@ -1,0 +1,47 @@
+---
+title: "Tutorial 05: Multi-Agent Coordination"
+sidebar: tutorials
+---
+
+## Overview
+
+This tutorial extends the EV charging problem to multi-agent settings where each charging station is controlled by an independent agent. The focus is on coordination strategies and fairness in decentralized control.
+
+## Learning Objectives
+
+- Implement multi-agent EV charging environment with PettingZoo interface
+- Develop centralized training with decentralized execution (CTDE)
+- Apply Multi-Agent PPO (MAPPO) with shared critics
+- Design communication protocols between agents
+- Evaluate fairness and coordination metrics
+
+## Resources
+
+### Jupyter Notebook
+[**View on GitHub**](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/05_ev_marl_coordination.ipynb)
+
+### Supporting Materials
+- [Python Script](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/05_ev_marl_coordination.py) - Jupytext paired version
+- [Technical Notes](https://github.com/jinming99/GridGuardian-RL/blob/main/tutorials/05_ev_multiagent_coordination_and_rl.md) - MARL theory
+
+## Key Concepts
+
+- **Partial Observability**: Agents observe local station states
+- **Shared Rewards**: Global objective with individual credit assignment
+- **Communication**: Information exchange protocols (broadcast, targeted)
+- **Fairness Metrics**: Gini coefficient and coordination measures
+
+## Prerequisites
+
+```python
+from envs.evcharging.multiagent_env import MultiAgentEVChargingEnv
+from tutorials.utils.marl import evaluate_multi_agent_policy, plot_agent_coordination_matrix
+```
+
+## Duration
+
+Approximately 90 minutes
+
+## Acknowledgments
+
+Based on MAPPO (Yu et al., 2021) and PettingZoo framework for multi-agent environments.

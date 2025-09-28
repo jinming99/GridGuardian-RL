@@ -1,0 +1,19 @@
+<script>
+(function() {
+  try {
+    var key = 'quarto-color-scheme';
+    var stored = localStorage.getItem(key);
+    // If no preference stored yet, default to dark and let the toggle manage afterwards
+    if (!stored) {
+      localStorage.setItem(key, 'dark');
+    }
+  } catch (e) {
+    // ignore storage errors (private mode, etc.)
+  }
+  // Ensure initial paint uses dark tokens before Quarto toggler initializes
+  var root = document.documentElement;
+  if (!root.getAttribute('data-bs-theme')) {
+    root.setAttribute('data-bs-theme', 'dark');
+  }
+})();
+</script>

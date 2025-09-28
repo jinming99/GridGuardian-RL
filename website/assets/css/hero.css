@@ -1,0 +1,355 @@
+/* ---------- Hero + Parallax (CSS-only) ---------- */
+/* Dark-mode optimized; degrades gracefully without scroll-driven animations */
+
+:root {
+  --hero-height: min(82vh, 720px);
+  /* Force brand primary token to match project brand (overrides Bootswatch) */
+  --bs-primary: #22c55e;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero-group, .hero-group * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Wrapper */
+.hero-group {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: var(--hero-height);
+  padding: 3.5rem 1rem 2.5rem;
+  overflow: clip;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  /* Scroll-driven animation: expose progress variable */
+  --p: 0;
+  animation: hero-progress linear both;
+  animation-timeline: scroll(root block);
+  background: radial-gradient(1200px 600px at 80% -10%, rgba(255,255,255,.04), transparent 60%);
+  /* Full-bleed breakout beyond content container */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+/* Keyframes producing --p */
+@keyframes hero-progress { from { --p: 0 } to { --p: 1 } }
+
+/* Derive transforms from progress */
+.hero-group {
+  --e: calc(var(--p) * var(--p));
+  --ry: calc((var(--e) - 0.5) * 18deg);
+  --ty-back:  calc((var(--e) - 0.5) * -40px);
+  --ty-mid:   calc((var(--e) - 0.5) * -80px);
+  --ty-front: calc((var(--e) - 0.5) * -140px);
+}
+
+.hero-layers {
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 1000px;
+  width: 100%;
+  min-height: var(--hero-height);
+}
+
+/* Layers */
+.layer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  overflow: hidden; /* clip overflows to avoid side bands */
+}
+.layer--back  { transform: translateY(var(--ty-back))  rotateY(var(--ry)); }
+.layer--mid   { transform: translateY(var(--ty-mid))   rotateY(var(--ry)); }
+.layer--front { transform: translateY(var(--ty-front)) rotateY(var(--ry)); pointer-events: auto; }
+
+/* Explicit stacking to avoid content overlap issues */
+.layer--back  { z-index: 1; }
+.layer--mid   { z-index: 2; }
+.layer--front { z-index: 10; }
+
+/* Colors (Bootstrap tokens with fallbacks) */
+.hero-group {
+  --c-primary: var(--bs-primary, #4fc3f7);
+  --c-safe:    var(--bs-success, #66bb6a);
+  --c-warn:    var(--bs-warning, #ffb74d);
+  --c-muted:   rgba(255,255,255,.14);
+  --c-muted-2: rgba(255,255,255,.08);
+  --c-text:    var(--bs-body-color, #e5e7eb);
+}
+
+/* SVG defaults */
+.hero-group svg { width: 100%; height: auto; }
+.hero-group .svg-fixed { width: auto; max-width: 100%; }
+
+/* Back / mid layer coloration */
+.grid-net { color: var(--c-muted-2); }
+.power-lines { color: var(--c-muted); }
+.blob-bg { color: var(--c-primary); opacity: .10; }
+.hills-bg { color: var(--c-safe); opacity: .12; }
+.wave-safe { color: var(--c-safe); opacity: .22; }
+.turbines, .solar { color: var(--c-muted); }
+
+/* Foreground content */
+.hero-foreground {
+  position: relative;
+  z-index: 11; /* ensure foreground stays above waves */
+  display: grid;
+  gap: .5rem;
+  place-items: center;
+  text-align: center;
+  padding: 0 1rem;
+}
+.hero-foreground .badge { width: 88px; height: auto; color: var(--c-primary); opacity: .95; }
+.hero-foreground h1 {
+  margin: .2rem 0 0;
+  font-size: clamp(2rem, 4vw + 1rem, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: .2px;
+  text-shadow: 0 1px 2px rgba(0,0,0,.25);
+}
+.hero-foreground .sub {
+  color: var(--c-text);
+  opacity: .88;
+  max-width: 60ch;
+  margin-top: .35rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,.18);
+}
+.hero-foreground .cta {
+  margin-top: 1rem;
+  display: flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Card-like section below hero (optional) */
+.section {
+  padding: 2.4rem 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section h2 { font-size: clamp(1.4rem, 1.2vw + 1rem, 1.8rem); }
+.section .cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  margin-top: 1rem;
+}
+.section .card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 12px;
+  padding: 1rem;
+}
+.section .card h3 {
+  margin: 0 0 .35rem;
+  font-size: 1.05rem;
+}
+
+/* Accessibility note for screen readers */
+.hero-group[aria-label]::before {
+  content: "";
+}
+
+/* Buttons (Bootstrap present, but small tweak for spacing) */
+.btn { white-space: nowrap; }
+
+/* Improve hero button contrast */
+.hero-foreground .btn-primary {
+  color: #fff !important;
+  background-color: var(--bs-primary, #22c55e) !important;
+  border-color: var(--bs-primary, #22c55e) !important;
+}
+.hero-foreground .btn-primary:hover { filter: brightness(.92); }
+
+.hero-foreground .btn-outline-light {
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,.95) !important;
+}
+.hero-foreground .btn-outline-light:hover {
+  background-color: rgba(255,255,255,.14) !important;
+  color: #ffffff !important;
+}
+
+/* Light theme: use dark text on translucent light background for better contrast */
+[data-bs-theme="light"] .hero-foreground .btn-outline-light {
+  background-color: rgba(255,255,255,.86) !important;
+  color: #0f172a !important; /* slate-900 */
+  border-color: rgba(15,23,42,.85) !important;
+}
+[data-bs-theme="light"] .hero-foreground .btn-outline-light:hover {
+  background-color: #ffffff !important;
+  color: #0b1320 !important;
+  border-color: #0b1320 !important;
+}
+
+/* Navbar readability: slightly larger text */
+.navbar .navbar-nav .nav-link { font-size: 1.05rem; }
+.navbar-brand { font-size: 1.12rem; }
+
+/* Navbar above hero layers for clickability */
+header.navbar, .navbar, .navbar.fixed-top, .navbar.sticky-top {
+  position: relative;
+  z-index: 1000;
+}
+
+/* Navbar height stability across themes */
+.navbar { padding-top: 0 !important; padding-bottom: 0 !important; }
+.navbar .container-fluid { min-height: 56px; align-items: center; }
+.navbar .navbar-brand,
+.navbar .navbar-nav .nav-link,
+.navbar .navbar-toggler {
+  padding-top: 0; padding-bottom: 0;
+  line-height: 1.25;
+}
+.navbar .navbar-brand,
+.navbar .navbar-nav .nav-link,
+.navbar .navbar-toggler {
+  display: flex; align-items: center; min-height: 56px;
+}
+@media (max-width: 600px) {
+  .navbar .container-fluid { min-height: 52px; }
+  .navbar .navbar-brand,
+  .navbar .navbar-nav .nav-link,
+  .navbar .navbar-toggler { min-height: 52px; }
+}
+
+/* ----- Haikei wave layers (image-based) ----- */
+/* Ensure images fill the layer and allow slight overflow for drift */
+.layer .wave-back, .layer .wave-mid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  will-change: transform;
+  backface-visibility: hidden;
+  contain: layout paint;
+}
+
+/* Static fallback image, removed once waves are mounted */
+.wave-back, .wave-mid {
+  background-image: url('../images/static-wave.svg');
+  background-size: cover;
+  background-position: center;
+}
+.wave-back.waves-mounted,
+.wave-mid.waves-mounted {
+  background-image: none !important;
+}
+.layer .wave-back img, .layer .wave-mid img {
+  width: 105%;
+  height: auto;
+  max-width: none;
+  display: block;
+}
+
+/* Inline SVGs should fill and inherit color */
+.layer .wave-back svg, .layer .wave-mid svg {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  display: block;
+  color: var(--bs-primary, #22c55e);
+}
+
+/* Seamless horizontal scroller (duplicate content: 200% width, move by -50%) */
+.wave-scroll {
+  width: 200%;
+  height: 100%;
+  display: flex;
+}
+.wave-scroll > svg { flex: 0 0 50%; width: 50%; height: 100%; }
+@keyframes gg-scroll-x {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Fallback drift when .wave-scroll is not present */
+@keyframes gg-drift-alt {
+  0%   { transform: translate3d(-0.15%, 0, 0); }
+  50%  { transform: translate3d( 0.15%, 0, 0); }
+  100% { transform: translate3d(-0.15%, 0, 0); }
+}
+
+.wave-back {
+  color: var(--bs-primary, #22c55e); /* currentColor for inline SVG paths */
+  opacity: 1;
+  animation: gg-drift-alt 110s ease-in-out infinite;
+}
+.wave-mid {
+  color: var(--bs-primary, #22c55e);
+  opacity: 1;
+  animation: gg-drift-alt 80s ease-in-out infinite;
+}
+
+/* Disable legacy container drift when using JS-driven waves */
+.wave-back, .wave-mid { animation: none !important; }
+
+/* Apply track animation (different speeds) */
+.wave-back .wave-scroll { animation: gg-scroll-x 120s linear infinite; }
+.wave-mid  .wave-scroll { animation: gg-scroll-x 90s linear infinite; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .wave-back, .wave-mid { animation: none !important; }
+}
+
+/* Mobile damping */
+@media (max-width: 600px) {
+  .hero-group {
+    --ry: 8deg; 
+    --ty-back: -20px; 
+    --ty-mid: -38px; 
+    --ty-front: -64px;
+  }
+  .wave-back { opacity: .12; }
+  .wave-mid  { opacity: .16; }
+}
+
+/* Disable scroll-driven parallax for the Control Shield hero to keep motion smooth */
+.hero--control-shield {
+  animation: none !important; /* disable hero-progress scroll timeline */
+}
+.hero--control-shield .layer--back,
+.hero--control-shield .layer--mid,
+.hero--control-shield .layer--front {
+  transform: none !important; /* no rotateY / translateY parallax */
+}
+
+/* Hide small badge icon in the foreground to reduce visual clutter */
+.hero-foreground .badge { display: none !important; }
+.hero-layers { width: 100% !important; }
+
+/* ---------------------------------------------- */
+/* Dark theme overrides: navbar & inline code     */
+/* ---------------------------------------------- */
+
+/* Stronger navbar contrast on dark background */
+header.navbar, .navbar, .navbar .container-fluid { background-color: #0b1320 !important; }
+.navbar .navbar-brand, .navbar .nav-link, .navbar .navbar-toggler { color: #ffffff !important; }
+.navbar .nav-link:hover, .navbar .nav-link:focus, .navbar .nav-link.active { color: #ffffff !important; filter: brightness(1.05); }
+
+/* Improve inline code readability inside dark pages and tables */
+:root, html[data-bs-theme="dark"] {
+  --inline-code-text: #0b1320; /* deep slate for light pill */
+  --inline-code-bg: rgba(255,255,255,0.96);
+  --inline-code-border: rgba(0,0,0,0.08);
+}
+
+/* Target inline code (not code blocks) and code in tables */
+:not(pre) > code, table code {
+  color: var(--inline-code-text) !important;
+  background-color: var(--inline-code-bg) !important;
+  border: 1px solid var(--inline-code-border) !important;
+  border-radius: .375rem !important;
+  padding: .15rem .35rem !important;
+  font-size: 85% !important;
+  white-space: nowrap;
+}

@@ -1,0 +1,257 @@
+---
+title: "Multi-Agent RL"
+sidebar: api
+---
+
+## Core Functions
+
+### `evaluate_multi_agent_policy`
+
+Evaluate policies in PettingZoo-style parallel environments.
+
+```python
+evaluate_multi_agent_policy(
+    policy_fn: Callable[[Dict[str, obs]], Dict[str, action]],
+    make_env_fn: Callable[..., ParallelEnv],
+    episodes: int = 2,
+    horizon: int = 288,
+    seeds: Optional[List[int]] = None,
+    track_metrics: Optional[List[str]] = None,
+) -> Tuple[float, float, float, Dict[str, Any]]
+```
+
+**Parameters:**
+| Name | Type | Description |
+|------|------|-------------|
+| `policy_fn` | `Callable` | Maps agent observations to actions |
+| `make_env_fn` | `Callable` | Creates multi-agent environment |
+| `track_metrics` | `list[str]` | Options: 'fairness', 'coordination', 'per_agent_rewards' |
+
+**Metrics Computed:**
+- **Fairness**: Gini coefficient of agent rewards (0=equal, 1=unequal)
+- **Coordination**: Mean correlation between agent actions
+- **Per-agent rewards**: Individual agent performance
+
+---
+
+### `run_multiagent_scenario_sweep`
+
+Compare multi-agent algorithms across scenarios.
+
+```python
+results_df = run_multiagent_scenario_sweep(
+    algorithms={'MAPPO': mappo_policy, 'IPPO': ippo_policy},
+    ma_env_factory=make_ma_env,
+    scenarios={'baseline': {}, 'delayed': {'env_kwargs': {'comm_delay': 5}}},
+    metrics_to_track=['fairness', 'coordination'],
+    episodes_per_scenario=5
+)
+```
+
+---
+
+## Data Structures
+
+### `MultiAgentRolloutBuffer`
+
+Per-agent trajectory storage with synchronization.
+
+```python
+MultiAgentRolloutBuffer(
+    agent_ids: List[str],
+    obs_shapes: Dict[str, Tuple],
+    act_shapes: Dict[str, Tuple],
+    capacity: int,
+    device: str = 'cpu'
+)
+```
+
+**Methods:**
+- `add(agent_id, obs, action, reward, done, value)`: Store per-agent
+- `get_batch(agent_id) -> Dict`: Get agent-specific batch
+- `compute_returns_per_agent(gamma, gae_lambda)`: Per-agent GAE
+
+---
+
+### `CentralizedCritic`
+
+Shared value function observing all agents.
+
+```python
+CentralizedCritic(
+    agent_obs_dims: Dict[str, int],
+    hidden_dim: int = 256,
+    use_layer_norm: bool = False
+)
+```
+
+**Architecture:**
+- Concatenates all agent observations
+- Outputs global value estimate
+- Optional layer normalization for stability
+
+---
+
+### `DecentralizedActorCritic`
+
+Independent or parameter-shared policies.
+
+```python
+DecentralizedActorCritic(
+    agent_configs: Dict[str, Dict],
+    share_parameters: bool = False
+)
+```
+
+**Modes:**
+- **Independent**: Separate networks per agent
+- **Shared**: Single network with agent IDs
+
+---
+
+## Communication
+
+### `CommNetwork`
+
+Inter-agent message passing.
+
+```python
+CommNetwork(
+    agent_ids: List[str],
+    message_dim: int = 32,
+    comm_type: str = 'broadcast'  # 'broadcast', 'targeted', 'graph'
+)
+```
+
+**Communication Types:**
+- **Broadcast**: All-to-all messages
+- **Targeted**: Selective communication
+- **Graph**: Topology-based messaging
+
+**Example:**
+```python
+comm = CommNetwork(agent_ids, comm_type='broadcast')
+messages = comm.forward(local_obs_dict)
+augmented_obs = comm.augment_observations(local_obs_dict, messages)
+```
+
+---
+
+## State Construction
+
+### `build_central_state`
+
+Construct global observation from local observations.
+
+```python
+central_state = build_central_state(
+    obs_dict={'agent_0': obs0, 'agent_1': obs1},
+    agent_order=['agent_0', 'agent_1']
+)
+# Returns: concatenated array [obs0, obs1]
+```
+
+### `build_share_obs_dict`
+
+Create shared observations for CTDE.
+
+```python
+share_obs = build_share_obs_dict(
+    obs_dict={'agent_0': obs0, 'agent_1': obs1},
+    agent_order=['agent_0', 'agent_1']
+)
+# Returns: {'agent_0': central_state, 'agent_1': central_state}
+```
+
+---
+
+## Value Normalization
+
+### `ValueNormalizer`
+
+Running statistics for value function targets.
+
+```python
+normalizer = ValueNormalizer()
+normalizer.update(returns_batch)
+normalized_values = normalizer.normalize_torch(value_tensor)
+denormalized = normalizer.denormalize_torch(normalized_tensor)
+```
+
+---
+
+## Coordination Metrics
+
+### `plot_agent_coordination_matrix`
+
+Visualize action correlations between agents.
+
+```python
+plot_agent_coordination_matrix(
+    trajectory={'agents': agent_trajectories},
+    figsize=(10, 8)
+)
+```
+
+**Displays:**
+- Correlation heatmap between agents
+- Time-series of agent actions
+- Coordination statistics
+
+---
+
+## Persistence
+
+### `save_marl_traj`
+
+Save multi-agent trajectories.
+
+```python
+actions_path, ts_path = save_marl_traj(
+    tag="ma_experiment_001",
+    traj_actions={'agent_0': actions_0, 'agent_1': actions_1},
+    ts=timeseries_df
+)
+```
+
+### `save_ma_models` / `load_ma_models`
+
+Checkpoint multi-agent models.
+
+```python
+# Save
+path = save_ma_models(
+    models={'agent_0': model_0, 'agent_1': model_1},
+    tag="mappo",
+    epoch=1000
+)
+
+# Load
+models = load_ma_models(
+    model_class=ActorCritic,
+    tag="mappo",
+    epoch=1000,
+    model_kwargs={'obs_dim': 24, 'act_dim': 1}
+)
+```
+
+---
+
+## Environment Wrappers
+
+### `create_ma_wrapper`
+
+Apply common multi-agent wrappers.
+
+```python
+wrapped_env = create_ma_wrapper(
+    ma_env,
+    wrapper_type='mask_obs',  # 'flatten', 'mask_obs', 'add_channels'
+    mask_keys=['demands']  # wrapper-specific kwargs
+)
+```
+
+**Wrapper Types:**
+- **flatten**: Simplify observation structure
+- **mask_obs**: Hide specified observation keys
+- **add_channels**: Add neighbor actions to observations

@@ -1,0 +1,61 @@
+---
+title: "GridGuardian-RL"
+page-layout: full
+toc: false
+---
+```{=html}
+<div class="hero-group hero--control-shield" role="region" aria-label="Hero section: Control Center & Shield">
+  <div class="hero-layers">
+
+    <!-- BACK: nice-waves mount -->
+    <div class="layer layer--back">
+      <div id="waves-back" class="wave-back"></div>
+    </div>
+
+    <!-- MID: nice-waves mount -->
+    <div class="layer layer--mid">
+      <div id="waves-mid" class="wave-mid"></div>
+    </div>
+
+    <!-- FRONT: Operator + monitors (simple pictogram) + text -->
+    <div class="layer layer--front hero-foreground">
+      <h1>AI‑Driven Control Center</h1>
+      <p class="sub">Human‑in‑the‑loop monitoring with safety envelopes, alarms, and resilient fallback strategies.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="tutorials/index.html">Explore Tutorials</a>
+        <a class="btn btn-outline-light" href="api/index.html">API Reference</a>
+        <a class="btn btn-outline-light" href="https://github.com/jinming99/GridGuardian-RL">GitHub</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Learn with Notebooks</h2>
+  <p class="muted">Hands-on, self-paced notebooks to build intuition and skills.</p>
+  <div class="cards">
+    <a class="card" href="tutorials/ev/01-environment.html"><h3>1. EV Environment</h3><p>Setup, observations, actions, and dynamics.</p></a>
+    <a class="card" href="tutorials/ev/02-baselines.html"><h3>2. Baselines</h3><p>Heuristics, MPC, and operational tradeoffs.</p></a>
+    <a class="card" href="tutorials/ev/04-safe-rl.html"><h3>3. Safe RL</h3><p>Constrained MDPs, shields, and safety envelopes.</p></a>
+    <a class="card" href="tutorials/ev/06-diagnostics.html"><h3>4. Diagnostics</h3><p>Metrics, saturation analysis, and stress tests.</p></a>
+  </div>
+  <div class="cta">
+    <a class="btn btn-primary" href="tutorials/index.html">Browse all Tutorials</a>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Inside the control loop</h2>
+  <div class="cards">
+    <div class="card"><h3>Dashboards</h3><p>KPIs, constraint margins, and alarms.</p></div>
+    <div class="card"><h3>Safe Overrides</h3><p>Emergency stop, recovery policies, and guardrails.</p></div>
+    <div class="card"><h3>Auditability</h3><p>Trace decisions and reproduce episodes under uncertainty.</p></div>
+  </div>
+</div>
+<!-- nice-waves scripts -->
+<script
+  src="https://unpkg.com/nice-waves@latest"
+  onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/gh/gVguy/nice-waves@latest/dist/waves.min.js'">
+</script>
+<script src="assets/js/nice-waves-init.js" defer></script>
+```

@@ -1,0 +1,101 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "GridGuardian-RL"
+  description: "Safe and Robust Reinforcement Learning for Power Systems"
+  # favicon intentionally unset (assets/favicon.ico missing). Add once available.
+  site-url: "https://jinming99.github.io/GridGuardian-RL"
+  repo-url: "https://github.com/jinming99/GridGuardian-RL"
+  repo-subdir: "website"
+  repo-actions: []
+  search:
+    location: navbar
+    type: textbox
+  open-graph: true
+  twitter-card: true
+  page-footer:
+    left: "© 2025 GridGuardian-RL"
+    right:
+      - text: "README"
+        href: https://github.com/jinming99/GridGuardian-RL#readme
+      - text: "LICENSE"
+        href: https://github.com/jinming99/GridGuardian-RL/blob/main/LICENSE
+      - text: "CITATION"
+        href: https://github.com/jinming99/GridGuardian-RL/blob/main/CITATION.cff
+  
+  navbar:
+    pinned: true
+    background: dark
+    foreground: light
+    brand: "GridGuardian-RL"
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Tutorials"
+        href: tutorials/index.qmd
+      - text: "API"
+        href: api/index.qmd
+    right:
+      - icon: github
+        href: https://github.com/jinming99/GridGuardian-RL
+        aria-label: GitHub
+
+  sidebar:
+    - id: tutorials
+      title: "Tutorials"
+      style: "floating"
+      collapse-level: 2
+      contents:
+        - tutorials/index.qmd
+        - section: "EV Charging"
+          contents:
+            - tutorials/ev/index.qmd
+            - tutorials/ev/01-environment.qmd
+            - tutorials/ev/02-baselines.qmd
+            - tutorials/ev/03-standard-rl.qmd
+            - tutorials/ev/04-safe-rl.qmd
+            - tutorials/ev/05-multi-agent.qmd
+            - tutorials/ev/06-diagnostics.qmd
+            - tutorials/ev/07-meta-learning.qmd
+            - tutorials/ev/08-gradient-methods.qmd
+    
+    - id: api
+      title: "API Reference"
+      style: "floating"
+      collapse-level: 2
+      contents:
+        - api/index.qmd
+        - section: "Core"
+          contents:
+            - api/ev.qmd
+            - api/common.qmd
+        - section: "Advanced"
+          contents:
+            - api/rl.qmd
+            - api/safe_rl.qmd
+            - api/marl.qmd
+            - api/diagnostics.qmd
+
+format:
+  html:
+    theme: [darkly, _variables.scss]
+    css:
+      - assets/css/hero.css
+    sanitize: false
+    highlight-style: atom-one
+    toc: false
+    smooth-scroll: true
+    page-navigation: true
+    code-copy: true
+    link-external-icon: false
+    link-external-newwindow: false
+    image: assets/banner.jpg
+    include-in-header:
+      - _includes/set-dark-default.html
+
+execute:
+  freeze: true
+  echo: true
+  warning: false

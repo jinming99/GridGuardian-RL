@@ -1,0 +1,73 @@
+---
+title: "API Reference"
+sidebar: api
+---
+
+## Module Architecture
+
+GridGuardian-RL utilities are organized into specialized modules:
+
+```python
+from tutorials.utils import (
+    evaluate_policy,      # Policy evaluation
+    sweep_noise,          # Robustness testing  
+    plot_robustness_heatmap,  # Visualization
+    save_timeseries,      # Persistence
+)
+```
+
+## Quick Links
+
+| Module | Primary Use | Key Functions |
+|--------|------------|---------------|
+| [**ev**](ev.qmd) | EV charging experiments | `evaluate_policy`, `sweep_noise`, `plot_action_distribution` |
+| [**common**](common.qmd) | Environment utilities | `create_ev_env`, `wrap_policy`, `DictFlatteningWrapper` |
+| [**rl**](rl.qmd) | RL infrastructure | `RolloutBuffer`, `layer_init`, `make_vec_envs` |
+| [**safe_rl**](safe_rl.qmd) | Constrained MDPs | `LagrangianMultiplier`, `SafeRolloutBuffer`, `BaseSafeRLTrainer` |
+| [**marl**](marl.qmd) | Multi-agent systems | `evaluate_multi_agent_policy`, `MultiAgentRolloutBuffer` |
+| [**diagnostics**](diagnostics.qmd) | Advanced analysis | `interactive_critical_timeline`, `analyze_violation_patterns` |
+
+## Import Pattern
+
+```python
+# Standard import
+from tutorials.utils import evaluate_policy, sweep_noise
+
+# Module-specific import
+from tutorials.utils.ev import save_evaluation_results
+from tutorials.utils.safe_rl import LagrangianMultiplier
+
+# Import all (use cautiously)
+from tutorials.utils import *
+```
+
+## Environment Configuration
+
+Override default cache directory:
+```bash
+export TUTORIALS_CACHE_DIR=/path/to/cache
+```
+
+## Common Workflows
+
+### Policy Evaluation
+```python
+mean_ret, std_ret, mean_cost, metrics = evaluate_policy(
+    policy_fn=my_policy,
+    make_env_fn=lambda: create_ev_env(site='caltech'),
+    episodes=10,
+    track_metrics=['satisfaction', 'actions']
+)
+```
+
+### Robustness Testing
+```python
+df = sweep_noise(policy_fn, make_env_fn)
+plot_robustness_heatmap(df)
+```
+
+### Safe RL Training
+```python
+lagrange = LagrangianMultiplier(cost_limit=25.0)
+buffer = SafeRolloutBuffer(obs_shape, act_shape, capacity=2048)
+```
