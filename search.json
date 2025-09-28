@@ -1,0 +1,1233 @@
+[
+  {
+    "objectID": "tutorials/ev/03-standard-rl.html",
+    "href": "tutorials/ev/03-standard-rl.html",
+    "title": "Tutorial 03: Standard RL and Robustness",
+    "section": "",
+    "text": "This tutorial implements standard reinforcement learning algorithms (PPO and SAC) for EV charging control. The focus is on training robust policies that maintain performance under observation and action noise.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 03: Standard RL and Robustness"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/03-standard-rl.html#overview",
+    "href": "tutorials/ev/03-standard-rl.html#overview",
+    "title": "Tutorial 03: Standard RL and Robustness",
+    "section": "",
+    "text": "This tutorial implements standard reinforcement learning algorithms (PPO and SAC) for EV charging control. The focus is on training robust policies that maintain performance under observation and action noise.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 03: Standard RL and Robustness"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/03-standard-rl.html#learning-objectives",
+    "href": "tutorials/ev/03-standard-rl.html#learning-objectives",
+    "title": "Tutorial 03: Standard RL and Robustness",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\n\nImplement Proximal Policy Optimization (PPO) with actor-critic architecture\nDevelop Soft Actor-Critic (SAC) for continuous control\nEvaluate policy robustness under various noise conditions\nIntegrate LSTM networks for temporal dependencies\nApply gradient regularization techniques (optional GRPO extensions)",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 03: Standard RL and Robustness"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/03-standard-rl.html#resources",
+    "href": "tutorials/ev/03-standard-rl.html#resources",
+    "title": "Tutorial 03: Standard RL and Robustness",
+    "section": "Resources",
+    "text": "Resources\n\nJupyter Notebook\nView on GitHub\n\n\nSupporting Materials\n\nPython Script - Jupytext paired version\nTechnical Notes - Algorithm details",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 03: Standard RL and Robustness"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/03-standard-rl.html#implementation-details",
+    "href": "tutorials/ev/03-standard-rl.html#implementation-details",
+    "title": "Tutorial 03: Standard RL and Robustness",
+    "section": "Implementation Details",
+    "text": "Implementation Details\n\nPPO: Clipped objective with GAE advantage estimation\nSAC: Maximum entropy framework with automatic temperature tuning\nRobustness: Grid search over observation/action noise levels\nMemory: LSTM integration for partial observability",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 03: Standard RL and Robustness"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/03-standard-rl.html#prerequisites",
+    "href": "tutorials/ev/03-standard-rl.html#prerequisites",
+    "title": "Tutorial 03: Standard RL and Robustness",
+    "section": "Prerequisites",
+    "text": "Prerequisites\nfrom tutorials.utils.rl import RolloutBuffer, layer_init\nfrom tutorials.utils.ev import sweep_noise, plot_robustness_heatmap\nimport torch.nn as nn",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 03: Standard RL and Robustness"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/03-standard-rl.html#duration",
+    "href": "tutorials/ev/03-standard-rl.html#duration",
+    "title": "Tutorial 03: Standard RL and Robustness",
+    "section": "Duration",
+    "text": "Duration\nApproximately 60 minutes",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 03: Standard RL and Robustness"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/03-standard-rl.html#acknowledgments",
+    "href": "tutorials/ev/03-standard-rl.html#acknowledgments",
+    "title": "Tutorial 03: Standard RL and Robustness",
+    "section": "Acknowledgments",
+    "text": "Acknowledgments\nBased on CleanRL implementations and Stable-Baselines3 design patterns.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 03: Standard RL and Robustness"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/04-safe-rl.html",
+    "href": "tutorials/ev/04-safe-rl.html",
+    "title": "Tutorial 04: Safe RL with CMDPs",
+    "section": "",
+    "text": "This tutorial implements safe reinforcement learning algorithms using Constrained Markov Decision Processes (CMDPs). The focus is on maintaining constraint satisfaction during both training and deployment through Lagrangian methods.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 04: Safe RL with CMDPs"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/04-safe-rl.html#overview",
+    "href": "tutorials/ev/04-safe-rl.html#overview",
+    "title": "Tutorial 04: Safe RL with CMDPs",
+    "section": "",
+    "text": "This tutorial implements safe reinforcement learning algorithms using Constrained Markov Decision Processes (CMDPs). The focus is on maintaining constraint satisfaction during both training and deployment through Lagrangian methods.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 04: Safe RL with CMDPs"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/04-safe-rl.html#learning-objectives",
+    "href": "tutorials/ev/04-safe-rl.html#learning-objectives",
+    "title": "Tutorial 04: Safe RL with CMDPs",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\n\nFormulate the EV charging problem as a CMDP\nImplement PPO-Lagrangian with adaptive dual variables\nAnalyze cost-return Pareto frontiers\nMonitor dual variable dynamics during training\nCompare PID and adaptive Lagrangian variants",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 04: Safe RL with CMDPs"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/04-safe-rl.html#resources",
+    "href": "tutorials/ev/04-safe-rl.html#resources",
+    "title": "Tutorial 04: Safe RL with CMDPs",
+    "section": "Resources",
+    "text": "Resources\n\nJupyter Notebook\nView on GitHub\n\n\nSupporting Materials\n\nPython Script - Jupytext paired version\nTechnical Notes - CMDP theory",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 04: Safe RL with CMDPs"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/04-safe-rl.html#key-concepts",
+    "href": "tutorials/ev/04-safe-rl.html#key-concepts",
+    "title": "Tutorial 04: Safe RL with CMDPs",
+    "section": "Key Concepts",
+    "text": "Key Concepts\n\nCost Signal: Excess charging beyond demand as constraint violation\nLagrangian Relaxation: Converting constrained to unconstrained optimization\nDual Updates: Adaptive penalty coefficient based on constraint satisfaction\nSafety Guarantees: Theoretical bounds on constraint violations",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 04: Safe RL with CMDPs"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/04-safe-rl.html#prerequisites",
+    "href": "tutorials/ev/04-safe-rl.html#prerequisites",
+    "title": "Tutorial 04: Safe RL with CMDPs",
+    "section": "Prerequisites",
+    "text": "Prerequisites\nfrom tutorials.utils.safe_rl import LagrangianMultiplier, SafeRolloutBuffer\nfrom tutorials.utils.ev import plot_cost_return_pareto, plot_dual_dynamics",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 04: Safe RL with CMDPs"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/04-safe-rl.html#duration",
+    "href": "tutorials/ev/04-safe-rl.html#duration",
+    "title": "Tutorial 04: Safe RL with CMDPs",
+    "section": "Duration",
+    "text": "Duration\nApproximately 60 minutes",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 04: Safe RL with CMDPs"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/04-safe-rl.html#acknowledgments",
+    "href": "tutorials/ev/04-safe-rl.html#acknowledgments",
+    "title": "Tutorial 04: Safe RL with CMDPs",
+    "section": "Acknowledgments",
+    "text": "Acknowledgments\nBased on Achiam et al. (2017) CPO and Ray et al. (2019) PPO-Lagrangian formulations.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 04: Safe RL with CMDPs"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/index.html",
+    "href": "tutorials/ev/index.html",
+    "title": "EV Charging Environment Tutorials",
+    "section": "",
+    "text": "The EV charging environment simulates a network of charging stations based on real data from the Caltech Adaptive Charging Network (ACN). The environment features:\n\n24-hour episodes with 5-minute decision intervals (288 steps)\nNetwork constraints enforced through convex optimization\nStochastic EV arrivals based on historical patterns\nCarbon-aware optimization using Marginal Operating Emissions Rate (MOER)",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "EV Charging Environment Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/index.html#environment-description",
+    "href": "tutorials/ev/index.html#environment-description",
+    "title": "EV Charging Environment Tutorials",
+    "section": "",
+    "text": "The EV charging environment simulates a network of charging stations based on real data from the Caltech Adaptive Charging Network (ACN). The environment features:\n\n24-hour episodes with 5-minute decision intervals (288 steps)\nNetwork constraints enforced through convex optimization\nStochastic EV arrivals based on historical patterns\nCarbon-aware optimization using Marginal Operating Emissions Rate (MOER)",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "EV Charging Environment Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/index.html#tutorial-progression",
+    "href": "tutorials/ev/index.html#tutorial-progression",
+    "title": "EV Charging Environment Tutorials",
+    "section": "Tutorial Progression",
+    "text": "Tutorial Progression\ngraph TD\n    A[01: Environment Setup] --&gt; B[02: Baseline Controllers]\n    B --&gt; C[03: Standard RL]\n    C --&gt; D[04: Safe RL]\n    C --&gt; E[05: Multi-Agent]\n    D --&gt; F[06: Diagnostics]\n    E --&gt; F\n    F --&gt; G[07: Meta-Learning]\n    F --&gt; H[08: Gradient Methods]",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "EV Charging Environment Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/index.html#core-concepts",
+    "href": "tutorials/ev/index.html#core-concepts",
+    "title": "EV Charging Environment Tutorials",
+    "section": "Core Concepts",
+    "text": "Core Concepts\n\nObservation Space\n\nCurrent timestep and estimated departures\nEnergy demands per station\nPrevious and forecasted MOER values\n\n\n\nAction Space\n\nNormalized charging rates [0, 1] per station\nActions projected to satisfy network constraints\n\n\n\nReward Structure\n\nProfit from energy delivered\nCarbon cost based on MOER\nPenalty for constraint violations",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "EV Charging Environment Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/index.html#data-sources",
+    "href": "tutorials/ev/index.html#data-sources",
+    "title": "EV Charging Environment Tutorials",
+    "section": "Data Sources",
+    "text": "Data Sources\n\nACN-Data: Real charging session data from Caltech campus\nCAISO MOER: California grid carbon intensity data\nNetwork Topology: Transformer and feeder capacity constraints",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "EV Charging Environment Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/index.html#implementation-details",
+    "href": "tutorials/ev/index.html#implementation-details",
+    "title": "EV Charging Environment Tutorials",
+    "section": "Implementation Details",
+    "text": "Implementation Details\nThe environment is built on: - Gymnasium for standard RL interface - CVXPY for constraint projection - NumPy/Pandas for data processing",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "EV Charging Environment Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/index.html#getting-started",
+    "href": "tutorials/ev/index.html#getting-started",
+    "title": "EV Charging Environment Tutorials",
+    "section": "Getting Started",
+    "text": "Getting Started\nBegin with Tutorial 01: Environment and Safety to understand the basic environment mechanics and constraint handling.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "EV Charging Environment Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/index.html",
+    "href": "tutorials/index.html",
+    "title": "Tutorials",
+    "section": "",
+    "text": "This section contains step-by-step tutorials for implementing safe and robust reinforcement learning algorithms in power system environments. The tutorials are organized by environment type, allowing for focused learning within specific application domains.",
+    "crumbs": [
+      "Home",
+      "Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/index.html#overview",
+    "href": "tutorials/index.html#overview",
+    "title": "Tutorials",
+    "section": "",
+    "text": "This section contains step-by-step tutorials for implementing safe and robust reinforcement learning algorithms in power system environments. The tutorials are organized by environment type, allowing for focused learning within specific application domains.",
+    "crumbs": [
+      "Home",
+      "Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/index.html#available-environments",
+    "href": "tutorials/index.html#available-environments",
+    "title": "Tutorials",
+    "section": "Available Environments",
+    "text": "Available Environments\n\nEV Charging Environment\nA comprehensive tutorial series covering electric vehicle charging coordination using the Caltech Adaptive Charging Network (ACN) data. Topics include:\n\nEnvironment setup and constraint handling\nBaseline controllers and benchmarking\nStandard and safe reinforcement learning\nMulti-agent coordination\nAdvanced diagnostic and optimization techniques\n\nStatus: Complete (8 tutorials)\n\n\nFuture Environments\nAdditional power system environments are planned for future releases:\n\nBuilding Energy Management: HVAC control and demand response\nMicrogrid Operation: Distributed energy resource coordination\nTransmission Network: Optimal power flow and stability control",
+    "crumbs": [
+      "Home",
+      "Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/index.html#prerequisites",
+    "href": "tutorials/index.html#prerequisites",
+    "title": "Tutorials",
+    "section": "Prerequisites",
+    "text": "Prerequisites\nAll tutorials require:\n# Python 3.10-3.12\npip install -r tutorials/requirements-tutorials.txt",
+    "crumbs": [
+      "Home",
+      "Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/index.html#tutorial-structure",
+    "href": "tutorials/index.html#tutorial-structure",
+    "title": "Tutorials",
+    "section": "Tutorial Structure",
+    "text": "Tutorial Structure\nEach tutorial follows a consistent format:\n\nOverview: Problem context and motivation\nObjectives: Specific learning outcomes\nImplementation: Link to Jupyter notebook\nResources: Additional documentation and references",
+    "crumbs": [
+      "Home",
+      "Tutorials"
+    ]
+  },
+  {
+    "objectID": "tutorials/index.html#contributing",
+    "href": "tutorials/index.html#contributing",
+    "title": "Tutorials",
+    "section": "Contributing",
+    "text": "Contributing\nTo propose new tutorials or environments, please open an issue on the GitHub repository.",
+    "crumbs": [
+      "Home",
+      "Tutorials"
+    ]
+  },
+  {
+    "objectID": "api/safe_rl.html",
+    "href": "api/safe_rl.html",
+    "title": "Safe RL",
+    "section": "",
+    "text": "Adaptive dual variable for constraint satisfaction.\nLagrangianMultiplier(\n    cost_limit: float,\n    variant: str = 'standard',  # 'standard', 'pid', 'adaptive'\n    init_value: float = 0.0,\n    lr: float = 0.035,\n)\nMethods: - update(mean_cost: float) -&gt; Dict[str, float]: Update λ based on constraint violation - get_penalty() -&gt; float: Current penalty coefficient\nExample:\nlagrange = LagrangianMultiplier(cost_limit=25.0, variant='pid')\nfor epoch in range(100):\n    mean_cost = evaluate_cost(policy)\n    stats = lagrange.update(mean_cost)\n    penalty = lagrange.get_penalty()\n\n\n\n\nExtended buffer for constrained MDPs.\nSafeRolloutBuffer(\n    obs_shape: Tuple,\n    act_shape: Tuple,\n    capacity: int,\n    device: str = 'cpu'\n)\nKey Methods: - add_safe(): Store transitions with cost signals - compute_returns_and_advantages(): GAE for rewards and costs\n\n\n\n\nAbstract base for Safe RL algorithms.\nclass MySafeAlgorithm(BaseSafeRLTrainer):\n    def update(self, batch):\n        # Implement algorithm-specific update\n        pass\nProvides: - Standardized rollout collection - Automatic constraint tracking - Checkpointing infrastructure",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Safe RL"
+    ]
+  },
+  {
+    "objectID": "api/safe_rl.html#core-components",
+    "href": "api/safe_rl.html#core-components",
+    "title": "Safe RL",
+    "section": "",
+    "text": "Adaptive dual variable for constraint satisfaction.\nLagrangianMultiplier(\n    cost_limit: float,\n    variant: str = 'standard',  # 'standard', 'pid', 'adaptive'\n    init_value: float = 0.0,\n    lr: float = 0.035,\n)\nMethods: - update(mean_cost: float) -&gt; Dict[str, float]: Update λ based on constraint violation - get_penalty() -&gt; float: Current penalty coefficient\nExample:\nlagrange = LagrangianMultiplier(cost_limit=25.0, variant='pid')\nfor epoch in range(100):\n    mean_cost = evaluate_cost(policy)\n    stats = lagrange.update(mean_cost)\n    penalty = lagrange.get_penalty()\n\n\n\n\nExtended buffer for constrained MDPs.\nSafeRolloutBuffer(\n    obs_shape: Tuple,\n    act_shape: Tuple,\n    capacity: int,\n    device: str = 'cpu'\n)\nKey Methods: - add_safe(): Store transitions with cost signals - compute_returns_and_advantages(): GAE for rewards and costs\n\n\n\n\nAbstract base for Safe RL algorithms.\nclass MySafeAlgorithm(BaseSafeRLTrainer):\n    def update(self, batch):\n        # Implement algorithm-specific update\n        pass\nProvides: - Standardized rollout collection - Automatic constraint tracking - Checkpointing infrastructure",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Safe RL"
+    ]
+  },
+  {
+    "objectID": "api/safe_rl.html#experiment-suite",
+    "href": "api/safe_rl.html#experiment-suite",
+    "title": "Safe RL",
+    "section": "Experiment Suite",
+    "text": "Experiment Suite\n\nSafeRLExperimentSuite\nComprehensive evaluation across conditions.\nsuite = SafeRLExperimentSuite(\n    env_factory=make_env,\n    cost_limits=[15.0, 25.0, 35.0],\n    noise_levels=[0.0, 0.1, 0.2],\n    seeds=[0, 1, 2]\n)\n\n# Run algorithms\nsuite.run_algorithm(PPOLag, \"PPO-Lag\", training_steps=100_000)\nsuite.run_algorithm(CPO, \"CPO\", training_steps=100_000)\n\n# Generate report\nreport = suite.generate_report(include_plots=True)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Safe RL"
+    ]
+  },
+  {
+    "objectID": "api/safe_rl.html#analysis-functions",
+    "href": "api/safe_rl.html#analysis-functions",
+    "title": "Safe RL",
+    "section": "Analysis Functions",
+    "text": "Analysis Functions\n\nrun_safe_rl_comparison\nCompare algorithms with safety metrics.\nresults_df = run_safe_rl_comparison(\n    algorithms={'PPO-Lag': ppo_lag, 'CPO': cpo},\n    env_factory=make_env,\n    cost_limit=25.0,\n    episodes_per_algorithm=10\n)\nReturns DataFrame with: - mean_return, std_return - mean_cost, std_cost - safety_rate: Episodes satisfying constraint - cvar_95_cost: Tail risk metric - constraint_violation\n\n\n\nplot_safety_metrics\nMulti-panel safety visualization.\nplot_safety_metrics(\n    results_df,\n    algorithms=['PPO-Lag', 'CPO'],\n    cost_limit=25.0\n)\nPanels: 1. Cost-Return trade-off 2. Safety rate comparison 3. CVaR analysis 4. Violation distribution 5. Performance stability 6. Composite score\n\n\n\ncompute_safety_pareto_frontier\nEstimate cost-reward trade-off.\npareto_df = compute_safety_pareto_frontier(\n    policy_fn=policy,\n    env_fn=make_env,\n    lambda_values=np.logspace(-2, 2, 20)\n)\nplot_cost_return_pareto(pareto_df)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Safe RL"
+    ]
+  },
+  {
+    "objectID": "api/safe_rl.html#integration-examples",
+    "href": "api/safe_rl.html#integration-examples",
+    "title": "Safe RL",
+    "section": "Integration Examples",
+    "text": "Integration Examples\n\nTraining Loop\nlagrange = LagrangianMultiplier(cost_limit=25.0)\nbuffer = SafeRolloutBuffer(obs_shape, act_shape, 2048)\n\nfor epoch in range(100):\n    # Collect rollouts\n    trajectories = collect_rollouts(policy, env, buffer)\n    \n    # Update dual variable\n    mean_cost = trajectories['costs'].mean()\n    lagrange.update(mean_cost)\n    \n    # Policy update with penalty\n    loss = policy_loss - lagrange.get_penalty() * cost_loss\n\n\nEvaluation\n# Create safe policy wrapper\nsafe_policy = create_safe_policy_wrapper(\n    actor_critic,\n    deterministic=True,\n    normalize_obs=True\n)\n\n# Evaluate with safety metrics\nmean_ret, std_ret, mean_cost, metrics = evaluate_policy(\n    safe_policy,\n    make_env,\n    track_metrics=['violations']\n)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Safe RL"
+    ]
+  },
+  {
+    "objectID": "api/diagnostics.html",
+    "href": "api/diagnostics.html",
+    "title": "Diagnostics",
+    "section": "",
+    "text": "Extract charging rates as DataFrame.\npilot_signals_df(env) -&gt; pd.DataFrame\nReturns: DataFrame with columns [‘t’, ‘station’, ‘amps’]\n\n\n\n\nCompute constraint violations at specific timestep.\nmagnitudes, slack = constraint_slack_t(env, t_index=50)\nReturns: - magnitudes: Constraint limits (A) - slack: Available margin (A)\n\n\n\n\nFull episode constraint analysis.\nmagnitudes, slacks = constraint_slack_series(env)\n# Shape: [T, num_constraints]\n\n\n\n\nStatistical analysis of constraint activity.\nstats = get_constraint_binding_stats(\n    env,\n    threshold=5.0  # Amps from limit to consider \"binding\"\n)\nReturns Dictionary: - binding_frequency: Per-constraint activation rate - temporal_pattern: Time-of-day binding distribution - violation_count: Number of violations - critical_constraints: Most frequently binding",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Diagnostics"
+    ]
+  },
+  {
+    "objectID": "api/diagnostics.html#constraint-analysis",
+    "href": "api/diagnostics.html#constraint-analysis",
+    "title": "Diagnostics",
+    "section": "",
+    "text": "Extract charging rates as DataFrame.\npilot_signals_df(env) -&gt; pd.DataFrame\nReturns: DataFrame with columns [‘t’, ‘station’, ‘amps’]\n\n\n\n\nCompute constraint violations at specific timestep.\nmagnitudes, slack = constraint_slack_t(env, t_index=50)\nReturns: - magnitudes: Constraint limits (A) - slack: Available margin (A)\n\n\n\n\nFull episode constraint analysis.\nmagnitudes, slacks = constraint_slack_series(env)\n# Shape: [T, num_constraints]\n\n\n\n\nStatistical analysis of constraint activity.\nstats = get_constraint_binding_stats(\n    env,\n    threshold=5.0  # Amps from limit to consider \"binding\"\n)\nReturns Dictionary: - binding_frequency: Per-constraint activation rate - temporal_pattern: Time-of-day binding distribution - violation_count: Number of violations - critical_constraints: Most frequently binding",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Diagnostics"
+    ]
+  },
+  {
+    "objectID": "api/diagnostics.html#policy-analysis",
+    "href": "api/diagnostics.html#policy-analysis",
+    "title": "Diagnostics",
+    "section": "Policy Analysis",
+    "text": "Policy Analysis\n\nget_policy_diagnostics\nComprehensive policy behavioral analysis.\ndiagnostics = get_policy_diagnostics(\n    policy_fn=policy,\n    env=env,\n    num_samples=100,\n    thresholds=(0.001, 0.999)\n)\nReturns: - Action distribution statistics - Saturation rates (low/high) - Policy entropy - Response patterns\n\n\n\ncompare_policies\nSide-by-side policy comparison.\ncomparison_df = compare_policies(\n    policies={'PPO': ppo_policy, 'SAC': sac_policy},\n    env_factory=make_env,\n    diagnostic_fn=get_policy_diagnostics\n)\n\n\n\npolicy_behavior_fingerprint\nGenerate unique behavioral signature.\nfingerprint = policy_behavior_fingerprint(\n    policy_fn=policy,\n    env_fn=make_env,\n    n_samples=100,\n    seed=0\n)\nFingerprint Components: - Action statistics - Station correlation patterns - Temporal response profile",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Diagnostics"
+    ]
+  },
+  {
+    "objectID": "api/diagnostics.html#visualization",
+    "href": "api/diagnostics.html#visualization",
+    "title": "Diagnostics",
+    "section": "Visualization",
+    "text": "Visualization\n\ninteractive_critical_timeline\nInteractive Plotly timeline with critical windows.\ninteractive_critical_timeline(\n    trajectory=trajectory,\n    env=env,\n    policy_fn=policy,\n    window_size=12,\n    top_k=5\n)\nFeatures: - Click-to-navigate timeline - Automatic critical period detection - State inspection panels - Safety metric overlays\n\n\n\nalgorithm_arena\nReal-time algorithm comparison.\nalgorithm_arena(\n    algorithms={'PPO': ppo, 'SAC': sac},\n    env_fn=make_env,\n    seed=42,\n    max_steps=288,\n    metrics_to_track=['reward', 'excess_charge']\n)\nDisplays: - Synchronized environment playback - Per-algorithm action heatmaps - Cumulative performance curves - Safety violation tracking\n\n\n\nanimate_policy_evolution\nVisualize learning progress.\nanimate_policy_evolution(\n    checkpoints=[model_100, model_500, model_1000],\n    env_fn=make_env,\n    episodes_per_checkpoint=1,\n    interval=500  # milliseconds\n)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Diagnostics"
+    ]
+  },
+  {
+    "objectID": "api/diagnostics.html#safety-analysis",
+    "href": "api/diagnostics.html#safety-analysis",
+    "title": "Diagnostics",
+    "section": "Safety Analysis",
+    "text": "Safety Analysis\n\nanalyze_violation_patterns\nCorrelate violations with environmental factors.\npatterns = analyze_violation_patterns(env, trajectory)\nAnalysis Includes: - Violation vs. demand correlation - Time-of-day patterns - MOER relationship - Action saturation correlation\n\n\n\ntest_safety_robustness\nSystematic safety evaluation under perturbations.\nrobustness_results = test_safety_robustness(\n    policy_fn=safe_policy,\n    env_fn=make_env,\n    cost_limit=25.0,\n    perturbations={\n        'obs_noise': [0.0, 0.1, 0.2],\n        'action_noise': [0.0, 0.05],\n        'demand_scale': [1.0, 1.5, 2.0]\n    }\n)\nReturns: Safety rate under each perturbation configuration.\n\n\n\ncompute_safety_pareto_frontier\nMap cost-reward trade-off curve.\npareto_df = compute_safety_pareto_frontier(\n    policy_fn=policy,\n    env_fn=make_env,\n    lambda_values=np.logspace(-2, 2, 20)\n)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Diagnostics"
+    ]
+  },
+  {
+    "objectID": "api/diagnostics.html#critical-windows",
+    "href": "api/diagnostics.html#critical-windows",
+    "title": "Diagnostics",
+    "section": "Critical Windows",
+    "text": "Critical Windows\n\nfind_critical_windows_from_series\nIdentify high-stress periods.\nwindows, slack = find_critical_windows_from_series(\n    moer=moer_series,\n    agg_demand=demand_series,\n    slack=slack_series,\n    topk=3,\n    window=12\n)\nReturns: List of (start, end) indices for critical periods.",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Diagnostics"
+    ]
+  },
+  {
+    "objectID": "api/diagnostics.html#advanced-metrics",
+    "href": "api/diagnostics.html#advanced-metrics",
+    "title": "Diagnostics",
+    "section": "Advanced Metrics",
+    "text": "Advanced Metrics\n\nplot_slack_from_env\nConstraint slack visualization.\nplot_slack_from_env(\n    env,\n    trajectory,\n    constraints_to_show=['transformer_1', 'feeder_A']\n)\n\n\n\nget_action_entropy\nMeasure policy stochasticity.\nentropy = get_action_entropy(\n    policy_fn=policy,\n    obs_samples=observations,\n    n_action_samples=100\n)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Diagnostics"
+    ]
+  },
+  {
+    "objectID": "api/diagnostics.html#debugging-utilities",
+    "href": "api/diagnostics.html#debugging-utilities",
+    "title": "Diagnostics",
+    "section": "Debugging Utilities",
+    "text": "Debugging Utilities\n\ntrace_reward_components\nDecompose reward signal.\ncomponents = trace_reward_components(\n    env,\n    trajectory,\n    breakdown_keys=['profit', 'carbon_cost', 'excess_charge']\n)\n\n\n\ndetect_mode_collapse\nIdentify degenerate policies.\nis_collapsed, metrics = detect_mode_collapse(\n    policy_fn=policy,\n    env_fn=make_env,\n    n_episodes=10,\n    variance_threshold=0.01\n)\nDetection Criteria: - Low action variance - High saturation rates - Minimal exploration",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Diagnostics"
+    ]
+  },
+  {
+    "objectID": "api/common.html",
+    "href": "api/common.html",
+    "title": "Common Utilities",
+    "section": "",
+    "text": "Standard factory for EV charging environments.\ncreate_ev_env(\n    site: str,\n    date_range: Tuple[str, str],\n    seed: int = 0,\n    safe_rl: bool = False,\n    flatten: bool = False,\n    noise: float = 0.0,\n    noise_action: float = 0.0,\n    **env_kwargs\n)\nParameters:\n\n\n\nName\nType\nDescription\n\n\n\n\nsite\nstr\n‘caltech’ or ‘jpl’\n\n\ndate_range\ntuple\n(‘YYYY-MM-DD’, ‘YYYY-MM-DD’)\n\n\nsafe_rl\nbool\nFlatten for OmniSafe compatibility\n\n\nnoise\nfloat\nObservation noise [0,1]\n\n\nnoise_action\nfloat\nAction noise [0,1]\n\n\n\nExample:\nenv = create_ev_env(\n    site='caltech',\n    date_range=('2022-01-01', '2022-01-07'),\n    noise=0.1\n)",
+    "crumbs": [
+      "Home",
+      "Core",
+      "Common Utilities"
+    ]
+  },
+  {
+    "objectID": "api/common.html#environment-management",
+    "href": "api/common.html#environment-management",
+    "title": "Common Utilities",
+    "section": "",
+    "text": "Standard factory for EV charging environments.\ncreate_ev_env(\n    site: str,\n    date_range: Tuple[str, str],\n    seed: int = 0,\n    safe_rl: bool = False,\n    flatten: bool = False,\n    noise: float = 0.0,\n    noise_action: float = 0.0,\n    **env_kwargs\n)\nParameters:\n\n\n\nName\nType\nDescription\n\n\n\n\nsite\nstr\n‘caltech’ or ‘jpl’\n\n\ndate_range\ntuple\n(‘YYYY-MM-DD’, ‘YYYY-MM-DD’)\n\n\nsafe_rl\nbool\nFlatten for OmniSafe compatibility\n\n\nnoise\nfloat\nObservation noise [0,1]\n\n\nnoise_action\nfloat\nAction noise [0,1]\n\n\n\nExample:\nenv = create_ev_env(\n    site='caltech',\n    date_range=('2022-01-01', '2022-01-07'),\n    noise=0.1\n)",
+    "crumbs": [
+      "Home",
+      "Core",
+      "Common Utilities"
+    ]
+  },
+  {
+    "objectID": "api/common.html#policy-wrappers",
+    "href": "api/common.html#policy-wrappers",
+    "title": "Common Utilities",
+    "section": "Policy Wrappers",
+    "text": "Policy Wrappers\n\nwrap_policy\nUniversal interface adapter for different policy formats.\nwrap_policy(policy_or_model) -&gt; Callable[[obs], action]\nSupports: - Callable functions - Objects with .get_action() - Objects with .predict() - Objects with .act()\nExample:\n# Works with any interface\npolicy_fn = wrap_policy(model)\naction = policy_fn(obs)\n\n\nwrap_ma_policy\nMulti-agent version returning Dict[agent_id, action].\nma_policy_fn = wrap_ma_policy(ma_model)\nactions = ma_policy_fn(obs_dict)  # Dict[agent_id, obs] -&gt; Dict[agent_id, action]",
+    "crumbs": [
+      "Home",
+      "Core",
+      "Common Utilities"
+    ]
+  },
+  {
+    "objectID": "api/common.html#environment-wrappers",
+    "href": "api/common.html#environment-wrappers",
+    "title": "Common Utilities",
+    "section": "Environment Wrappers",
+    "text": "Environment Wrappers\n\nDictFlatteningWrapper\nConvert Dict observation spaces to Box.\nwrapped_env = DictFlatteningWrapper(env)\n# Now obs is np.ndarray instead of dict\n\n\nmake_vec_envs\nCreate vectorized environments.\nvec_envs = make_vec_envs(\n    env_id='EVCharging-v0',\n    num_envs=4,\n    seed=0,\n    device='cpu',\n    wrapper_fn=None\n)",
+    "crumbs": [
+      "Home",
+      "Core",
+      "Common Utilities"
+    ]
+  },
+  {
+    "objectID": "api/common.html#data-extraction",
+    "href": "api/common.html#data-extraction",
+    "title": "Common Utilities",
+    "section": "Data Extraction",
+    "text": "Data Extraction\n\nextract_from_obs\nExtract component from any observation format.\ndemands = extract_from_obs(obs, 'demands', env_space)\n# Works with both Dict and flattened observations",
+    "crumbs": [
+      "Home",
+      "Core",
+      "Common Utilities"
+    ]
+  },
+  {
+    "objectID": "api/common.html#optimization-helpers",
+    "href": "api/common.html#optimization-helpers",
+    "title": "Common Utilities",
+    "section": "Optimization Helpers",
+    "text": "Optimization Helpers\n\nsolve_cvx_with_fallback\nRobust CVXPY solving with automatic fallback.\nresult = solve_cvx_with_fallback(\n    prob,\n    solvers=['MOSEK', 'SCS', 'OSQP'],\n    verbose=False\n)\nFeatures: - Tries solvers in order - Graceful degradation - Returns solution status",
+    "crumbs": [
+      "Home",
+      "Core",
+      "Common Utilities"
+    ]
+  },
+  {
+    "objectID": "api/common.html#utility-functions",
+    "href": "api/common.html#utility-functions",
+    "title": "Common Utilities",
+    "section": "Utility Functions",
+    "text": "Utility Functions\n\nset_random_seed\nReproducibility helper.\nset_random_seed(42)\n# Sets: numpy, random, torch (if available)\n\n\nget_obs_shape / get_action_dim\nSpace introspection utilities.\nobs_shape = get_obs_shape(env.observation_space)\nact_dim = get_action_dim(env.action_space)",
+    "crumbs": [
+      "Home",
+      "Core",
+      "Common Utilities"
+    ]
+  },
+  {
+    "objectID": "api/common.html#cache-management",
+    "href": "api/common.html#cache-management",
+    "title": "Common Utilities",
+    "section": "Cache Management",
+    "text": "Cache Management\n\nDirectory Structure\nget_cache_dir(kind='rl')  # Returns: ./cache/rl/\n# Override with: export TUTORIALS_CACHE_DIR=/custom/path\nStandard kinds: - 'baselines': Baseline controllers - 'rl': Standard RL - 'safe_rl': Constrained MDPs\n- 'marl': Multi-agent\n\n\nPath Helpers\npath = cache_path(kind='rl', tag='exp001', suffix='model')\n# Returns: ./cache/rl/exp001_model.pt",
+    "crumbs": [
+      "Home",
+      "Core",
+      "Common Utilities"
+    ]
+  },
+  {
+    "objectID": "api/common.html#configuration",
+    "href": "api/common.html#configuration",
+    "title": "Common Utilities",
+    "section": "Configuration",
+    "text": "Configuration\n\ncreate_experiment_config\nStandardized experiment records.\nconfig = create_experiment_config(\n    algorithm='PPO',\n    env_config={'site': 'caltech'},\n    hyperparams={'lr': 3e-4, 'batch_size': 64},\n    seed=42\n)\nReturns:\n{\n    'algorithm': 'PPO',\n    'env_config': {...},\n    'hyperparams': {...},\n    'seed': 42,\n    'timestamp': '2025-01-01T12:00:00'\n}",
+    "crumbs": [
+      "Home",
+      "Core",
+      "Common Utilities"
+    ]
+  },
+  {
+    "objectID": "api/rl.html",
+    "href": "api/rl.html",
+    "title": "RL Infrastructure",
+    "section": "",
+    "text": "On-policy trajectory storage for PPO-style algorithms.\nRolloutBuffer(\n    obs_shape: Tuple,\n    act_shape: Tuple, \n    capacity: int,\n    device: str = 'cpu'\n)\nMethods: - add(obs, action, logprob, reward, done, value): Store transition - get() -&gt; Dict[str, Tensor]: Return all data for training - compute_returns_and_advantages(gamma, gae_lambda): GAE computation\nExample:\nbuffer = RolloutBuffer((obs_dim,), (act_dim,), capacity=2048)\nfor step in range(rollout_steps):\n    buffer.add(obs, action, logprob, reward, done, value)\nbatch = buffer.get()\n\n\n\n\nOnline normalization statistics for observation preprocessing.\nRunningMeanStd(shape=(), epsilon=1e-4)\nMethods: - update(x): Update statistics with new batch - normalize(x): Apply normalization",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "RL Infrastructure"
+    ]
+  },
+  {
+    "objectID": "api/rl.html#data-structures",
+    "href": "api/rl.html#data-structures",
+    "title": "RL Infrastructure",
+    "section": "",
+    "text": "On-policy trajectory storage for PPO-style algorithms.\nRolloutBuffer(\n    obs_shape: Tuple,\n    act_shape: Tuple, \n    capacity: int,\n    device: str = 'cpu'\n)\nMethods: - add(obs, action, logprob, reward, done, value): Store transition - get() -&gt; Dict[str, Tensor]: Return all data for training - compute_returns_and_advantages(gamma, gae_lambda): GAE computation\nExample:\nbuffer = RolloutBuffer((obs_dim,), (act_dim,), capacity=2048)\nfor step in range(rollout_steps):\n    buffer.add(obs, action, logprob, reward, done, value)\nbatch = buffer.get()\n\n\n\n\nOnline normalization statistics for observation preprocessing.\nRunningMeanStd(shape=(), epsilon=1e-4)\nMethods: - update(x): Update statistics with new batch - normalize(x): Apply normalization",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "RL Infrastructure"
+    ]
+  },
+  {
+    "objectID": "api/rl.html#network-utilities",
+    "href": "api/rl.html#network-utilities",
+    "title": "RL Infrastructure",
+    "section": "Network Utilities",
+    "text": "Network Utilities\n\nlayer_init\nOrthogonal initialization for neural network layers.\nlayer_init(layer, std=np.sqrt(2), bias_const=0.0)\nParameters: | Name | Type | Description | |——|——|————-| | layer | nn.Module | PyTorch layer | | std | float | Standard deviation for weights | | bias_const | float | Constant for bias initialization |\n\n\n\nmake_vec_envs\nCreate vectorized environments for parallel rollouts.\nmake_vec_envs(\n    env_id: str,\n    num_envs: int = 1,\n    seed: int = 0,\n    device: str = 'cpu',\n    wrapper_fn: Optional[Callable] = None\n) -&gt; VectorEnv",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "RL Infrastructure"
+    ]
+  },
+  {
+    "objectID": "api/rl.html#training-utilities",
+    "href": "api/rl.html#training-utilities",
+    "title": "RL Infrastructure",
+    "section": "Training Utilities",
+    "text": "Training Utilities\n\nLinearSchedule\nLinear parameter scheduling for learning rates and exploration.\nschedule = LinearSchedule(\n    initial=1.0,\n    final=0.1,\n    total_steps=100000\n)\ncurrent_value = schedule(step)\n\n\n\nexplained_variance\nCompute explained variance for value function quality assessment.\nev = explained_variance(y_pred, y_true)\n# Returns: float in (-inf, 1.0], where 1.0 is perfect prediction\n\n\n\nset_random_seed\nSet seeds for reproducibility across all random number generators.\nset_random_seed(42)\n# Sets: numpy.random, random, torch.manual_seed",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "RL Infrastructure"
+    ]
+  },
+  {
+    "objectID": "api/rl.html#ppo-components",
+    "href": "api/rl.html#ppo-components",
+    "title": "RL Infrastructure",
+    "section": "PPO Components",
+    "text": "PPO Components\n\nBasic Actor-Critic Architecture\nclass ActorCritic(nn.Module):\n    def __init__(self, obs_dim, act_dim, hidden_dim=256):\n        super().__init__()\n        self.actor = nn.Sequential(\n            layer_init(nn.Linear(obs_dim, hidden_dim)),\n            nn.Tanh(),\n            layer_init(nn.Linear(hidden_dim, hidden_dim)),\n            nn.Tanh(),\n            layer_init(nn.Linear(hidden_dim, act_dim), std=0.01)\n        )\n        self.critic = nn.Sequential(\n            layer_init(nn.Linear(obs_dim, hidden_dim)),\n            nn.Tanh(),\n            layer_init(nn.Linear(hidden_dim, hidden_dim)),\n            nn.Tanh(),\n            layer_init(nn.Linear(hidden_dim, 1), std=1.0)\n        )\n        \n    def get_value(self, obs):\n        return self.critic(obs)\n    \n    def get_action_and_value(self, obs):\n        mean = self.actor(obs)\n        std = torch.ones_like(mean) * 0.5\n        dist = Normal(mean, std)\n        action = dist.sample()\n        return action, dist.log_prob(action).sum(-1), self.critic(obs)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "RL Infrastructure"
+    ]
+  },
+  {
+    "objectID": "api/rl.html#training-loop-utilities",
+    "href": "api/rl.html#training-loop-utilities",
+    "title": "RL Infrastructure",
+    "section": "Training Loop Utilities",
+    "text": "Training Loop Utilities\n\nrun_training_with_monitoring\nGeneric training wrapper with logging and checkpointing.\nmodel, results_df = run_training_with_monitoring(\n    train_fn=ppo_train_generator,\n    config={'lr': 3e-4, 'batch_size': 64},\n    tag=\"experiment_001\",\n    checkpoint_freq=10000,\n    eval_freq=5000\n)\nFeatures: - Automatic model checkpointing - Periodic evaluation - Progress logging to DataFrame",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "RL Infrastructure"
+    ]
+  },
+  {
+    "objectID": "api/rl.html#memory-based-policies",
+    "href": "api/rl.html#memory-based-policies",
+    "title": "RL Infrastructure",
+    "section": "Memory-Based Policies",
+    "text": "Memory-Based Policies\n\nLSTM Integration\nclass LSTMPolicy(nn.Module):\n    def __init__(self, obs_dim, act_dim, hidden_dim=256):\n        super().__init__()\n        self.lstm = nn.LSTM(obs_dim, hidden_dim, batch_first=True)\n        self.actor = layer_init(nn.Linear(hidden_dim, act_dim))\n        self.critic = layer_init(nn.Linear(hidden_dim, 1))\n        \n    def forward(self, obs, hidden=None):\n        lstm_out, hidden = self.lstm(obs, hidden)\n        return self.actor(lstm_out), self.critic(lstm_out), hidden\nUsage Notes: - Reset hidden state at episode boundaries - Maintain hidden state across rollout steps - Use sequence padding for variable-length episodes",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "RL Infrastructure"
+    ]
+  },
+  {
+    "objectID": "api/index.html",
+    "href": "api/index.html",
+    "title": "API Reference",
+    "section": "",
+    "text": "GridGuardian-RL utilities are organized into specialized modules:\nfrom tutorials.utils import (\n    evaluate_policy,      # Policy evaluation\n    sweep_noise,          # Robustness testing  \n    plot_robustness_heatmap,  # Visualization\n    save_timeseries,      # Persistence\n)",
+    "crumbs": [
+      "Home",
+      "API Reference"
+    ]
+  },
+  {
+    "objectID": "api/index.html#module-architecture",
+    "href": "api/index.html#module-architecture",
+    "title": "API Reference",
+    "section": "",
+    "text": "GridGuardian-RL utilities are organized into specialized modules:\nfrom tutorials.utils import (\n    evaluate_policy,      # Policy evaluation\n    sweep_noise,          # Robustness testing  \n    plot_robustness_heatmap,  # Visualization\n    save_timeseries,      # Persistence\n)",
+    "crumbs": [
+      "Home",
+      "API Reference"
+    ]
+  },
+  {
+    "objectID": "api/index.html#quick-links",
+    "href": "api/index.html#quick-links",
+    "title": "API Reference",
+    "section": "Quick Links",
+    "text": "Quick Links\n\n\n\nModule\nPrimary Use\nKey Functions\n\n\n\n\nev\nEV charging experiments\nevaluate_policy, sweep_noise, plot_action_distribution\n\n\ncommon\nEnvironment utilities\ncreate_ev_env, wrap_policy, DictFlatteningWrapper\n\n\nrl\nRL infrastructure\nRolloutBuffer, layer_init, make_vec_envs\n\n\nsafe_rl\nConstrained MDPs\nLagrangianMultiplier, SafeRolloutBuffer, BaseSafeRLTrainer\n\n\nmarl\nMulti-agent systems\nevaluate_multi_agent_policy, MultiAgentRolloutBuffer\n\n\ndiagnostics\nAdvanced analysis\ninteractive_critical_timeline, analyze_violation_patterns",
+    "crumbs": [
+      "Home",
+      "API Reference"
+    ]
+  },
+  {
+    "objectID": "api/index.html#import-pattern",
+    "href": "api/index.html#import-pattern",
+    "title": "API Reference",
+    "section": "Import Pattern",
+    "text": "Import Pattern\n# Standard import\nfrom tutorials.utils import evaluate_policy, sweep_noise\n\n# Module-specific import\nfrom tutorials.utils.ev import save_evaluation_results\nfrom tutorials.utils.safe_rl import LagrangianMultiplier\n\n# Import all (use cautiously)\nfrom tutorials.utils import *",
+    "crumbs": [
+      "Home",
+      "API Reference"
+    ]
+  },
+  {
+    "objectID": "api/index.html#environment-configuration",
+    "href": "api/index.html#environment-configuration",
+    "title": "API Reference",
+    "section": "Environment Configuration",
+    "text": "Environment Configuration\nOverride default cache directory:\nexport TUTORIALS_CACHE_DIR=/path/to/cache",
+    "crumbs": [
+      "Home",
+      "API Reference"
+    ]
+  },
+  {
+    "objectID": "api/index.html#common-workflows",
+    "href": "api/index.html#common-workflows",
+    "title": "API Reference",
+    "section": "Common Workflows",
+    "text": "Common Workflows\n\nPolicy Evaluation\nmean_ret, std_ret, mean_cost, metrics = evaluate_policy(\n    policy_fn=my_policy,\n    make_env_fn=lambda: create_ev_env(site='caltech'),\n    episodes=10,\n    track_metrics=['satisfaction', 'actions']\n)\n\n\nRobustness Testing\ndf = sweep_noise(policy_fn, make_env_fn)\nplot_robustness_heatmap(df)\n\n\nSafe RL Training\nlagrange = LagrangianMultiplier(cost_limit=25.0)\nbuffer = SafeRolloutBuffer(obs_shape, act_shape, capacity=2048)",
+    "crumbs": [
+      "Home",
+      "API Reference"
+    ]
+  },
+  {
+    "objectID": "api/marl.html",
+    "href": "api/marl.html",
+    "title": "Multi-Agent RL",
+    "section": "",
+    "text": "Evaluate policies in PettingZoo-style parallel environments.\nevaluate_multi_agent_policy(\n    policy_fn: Callable[[Dict[str, obs]], Dict[str, action]],\n    make_env_fn: Callable[..., ParallelEnv],\n    episodes: int = 2,\n    horizon: int = 288,\n    seeds: Optional[List[int]] = None,\n    track_metrics: Optional[List[str]] = None,\n) -&gt; Tuple[float, float, float, Dict[str, Any]]\nParameters: | Name | Type | Description | |——|——|————-| | policy_fn | Callable | Maps agent observations to actions | | make_env_fn | Callable | Creates multi-agent environment | | track_metrics | list[str] | Options: ‘fairness’, ‘coordination’, ‘per_agent_rewards’ |\nMetrics Computed: - Fairness: Gini coefficient of agent rewards (0=equal, 1=unequal) - Coordination: Mean correlation between agent actions - Per-agent rewards: Individual agent performance\n\n\n\n\nCompare multi-agent algorithms across scenarios.\nresults_df = run_multiagent_scenario_sweep(\n    algorithms={'MAPPO': mappo_policy, 'IPPO': ippo_policy},\n    ma_env_factory=make_ma_env,\n    scenarios={'baseline': {}, 'delayed': {'env_kwargs': {'comm_delay': 5}}},\n    metrics_to_track=['fairness', 'coordination'],\n    episodes_per_scenario=5\n)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Multi-Agent RL"
+    ]
+  },
+  {
+    "objectID": "api/marl.html#core-functions",
+    "href": "api/marl.html#core-functions",
+    "title": "Multi-Agent RL",
+    "section": "",
+    "text": "Evaluate policies in PettingZoo-style parallel environments.\nevaluate_multi_agent_policy(\n    policy_fn: Callable[[Dict[str, obs]], Dict[str, action]],\n    make_env_fn: Callable[..., ParallelEnv],\n    episodes: int = 2,\n    horizon: int = 288,\n    seeds: Optional[List[int]] = None,\n    track_metrics: Optional[List[str]] = None,\n) -&gt; Tuple[float, float, float, Dict[str, Any]]\nParameters: | Name | Type | Description | |——|——|————-| | policy_fn | Callable | Maps agent observations to actions | | make_env_fn | Callable | Creates multi-agent environment | | track_metrics | list[str] | Options: ‘fairness’, ‘coordination’, ‘per_agent_rewards’ |\nMetrics Computed: - Fairness: Gini coefficient of agent rewards (0=equal, 1=unequal) - Coordination: Mean correlation between agent actions - Per-agent rewards: Individual agent performance\n\n\n\n\nCompare multi-agent algorithms across scenarios.\nresults_df = run_multiagent_scenario_sweep(\n    algorithms={'MAPPO': mappo_policy, 'IPPO': ippo_policy},\n    ma_env_factory=make_ma_env,\n    scenarios={'baseline': {}, 'delayed': {'env_kwargs': {'comm_delay': 5}}},\n    metrics_to_track=['fairness', 'coordination'],\n    episodes_per_scenario=5\n)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Multi-Agent RL"
+    ]
+  },
+  {
+    "objectID": "api/marl.html#data-structures",
+    "href": "api/marl.html#data-structures",
+    "title": "Multi-Agent RL",
+    "section": "Data Structures",
+    "text": "Data Structures\n\nMultiAgentRolloutBuffer\nPer-agent trajectory storage with synchronization.\nMultiAgentRolloutBuffer(\n    agent_ids: List[str],\n    obs_shapes: Dict[str, Tuple],\n    act_shapes: Dict[str, Tuple],\n    capacity: int,\n    device: str = 'cpu'\n)\nMethods: - add(agent_id, obs, action, reward, done, value): Store per-agent - get_batch(agent_id) -&gt; Dict: Get agent-specific batch - compute_returns_per_agent(gamma, gae_lambda): Per-agent GAE\n\n\n\nCentralizedCritic\nShared value function observing all agents.\nCentralizedCritic(\n    agent_obs_dims: Dict[str, int],\n    hidden_dim: int = 256,\n    use_layer_norm: bool = False\n)\nArchitecture: - Concatenates all agent observations - Outputs global value estimate - Optional layer normalization for stability\n\n\n\nDecentralizedActorCritic\nIndependent or parameter-shared policies.\nDecentralizedActorCritic(\n    agent_configs: Dict[str, Dict],\n    share_parameters: bool = False\n)\nModes: - Independent: Separate networks per agent - Shared: Single network with agent IDs",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Multi-Agent RL"
+    ]
+  },
+  {
+    "objectID": "api/marl.html#communication",
+    "href": "api/marl.html#communication",
+    "title": "Multi-Agent RL",
+    "section": "Communication",
+    "text": "Communication\n\nCommNetwork\nInter-agent message passing.\nCommNetwork(\n    agent_ids: List[str],\n    message_dim: int = 32,\n    comm_type: str = 'broadcast'  # 'broadcast', 'targeted', 'graph'\n)\nCommunication Types: - Broadcast: All-to-all messages - Targeted: Selective communication - Graph: Topology-based messaging\nExample:\ncomm = CommNetwork(agent_ids, comm_type='broadcast')\nmessages = comm.forward(local_obs_dict)\naugmented_obs = comm.augment_observations(local_obs_dict, messages)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Multi-Agent RL"
+    ]
+  },
+  {
+    "objectID": "api/marl.html#state-construction",
+    "href": "api/marl.html#state-construction",
+    "title": "Multi-Agent RL",
+    "section": "State Construction",
+    "text": "State Construction\n\nbuild_central_state\nConstruct global observation from local observations.\ncentral_state = build_central_state(\n    obs_dict={'agent_0': obs0, 'agent_1': obs1},\n    agent_order=['agent_0', 'agent_1']\n)\n# Returns: concatenated array [obs0, obs1]\n\n\nbuild_share_obs_dict\nCreate shared observations for CTDE.\nshare_obs = build_share_obs_dict(\n    obs_dict={'agent_0': obs0, 'agent_1': obs1},\n    agent_order=['agent_0', 'agent_1']\n)\n# Returns: {'agent_0': central_state, 'agent_1': central_state}",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Multi-Agent RL"
+    ]
+  },
+  {
+    "objectID": "api/marl.html#value-normalization",
+    "href": "api/marl.html#value-normalization",
+    "title": "Multi-Agent RL",
+    "section": "Value Normalization",
+    "text": "Value Normalization\n\nValueNormalizer\nRunning statistics for value function targets.\nnormalizer = ValueNormalizer()\nnormalizer.update(returns_batch)\nnormalized_values = normalizer.normalize_torch(value_tensor)\ndenormalized = normalizer.denormalize_torch(normalized_tensor)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Multi-Agent RL"
+    ]
+  },
+  {
+    "objectID": "api/marl.html#coordination-metrics",
+    "href": "api/marl.html#coordination-metrics",
+    "title": "Multi-Agent RL",
+    "section": "Coordination Metrics",
+    "text": "Coordination Metrics\n\nplot_agent_coordination_matrix\nVisualize action correlations between agents.\nplot_agent_coordination_matrix(\n    trajectory={'agents': agent_trajectories},\n    figsize=(10, 8)\n)\nDisplays: - Correlation heatmap between agents - Time-series of agent actions - Coordination statistics",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Multi-Agent RL"
+    ]
+  },
+  {
+    "objectID": "api/marl.html#persistence",
+    "href": "api/marl.html#persistence",
+    "title": "Multi-Agent RL",
+    "section": "Persistence",
+    "text": "Persistence\n\nsave_marl_traj\nSave multi-agent trajectories.\nactions_path, ts_path = save_marl_traj(\n    tag=\"ma_experiment_001\",\n    traj_actions={'agent_0': actions_0, 'agent_1': actions_1},\n    ts=timeseries_df\n)\n\n\nsave_ma_models / load_ma_models\nCheckpoint multi-agent models.\n# Save\npath = save_ma_models(\n    models={'agent_0': model_0, 'agent_1': model_1},\n    tag=\"mappo\",\n    epoch=1000\n)\n\n# Load\nmodels = load_ma_models(\n    model_class=ActorCritic,\n    tag=\"mappo\",\n    epoch=1000,\n    model_kwargs={'obs_dim': 24, 'act_dim': 1}\n)",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Multi-Agent RL"
+    ]
+  },
+  {
+    "objectID": "api/marl.html#environment-wrappers",
+    "href": "api/marl.html#environment-wrappers",
+    "title": "Multi-Agent RL",
+    "section": "Environment Wrappers",
+    "text": "Environment Wrappers\n\ncreate_ma_wrapper\nApply common multi-agent wrappers.\nwrapped_env = create_ma_wrapper(\n    ma_env,\n    wrapper_type='mask_obs',  # 'flatten', 'mask_obs', 'add_channels'\n    mask_keys=['demands']  # wrapper-specific kwargs\n)\nWrapper Types: - flatten: Simplify observation structure - mask_obs: Hide specified observation keys - add_channels: Add neighbor actions to observations",
+    "crumbs": [
+      "Home",
+      "Advanced",
+      "Multi-Agent RL"
+    ]
+  },
+  {
+    "objectID": "api/ev.html",
+    "href": "api/ev.html",
+    "title": "EV Utilities",
+    "section": "",
+    "text": "Comprehensive policy evaluation with metric tracking.\nevaluate_policy(\n    policy_fn: Callable[[Any], np.ndarray],\n    make_env_fn: Callable[..., object],\n    episodes: int = 2,\n    noise: Optional[float] = None,\n    noise_action: Optional[float] = None,\n    horizon: int = 288,\n    track_metrics: Optional[list[str]] = None,\n    verbose: bool = False,\n) -&gt; Tuple[float, float, float, Dict[str, Any]]\nParameters:\n\n\n\nName\nType\nDescription\n\n\n\n\npolicy_fn\nCallable\nMaps observations to actions\n\n\nmake_env_fn\nCallable\nEnvironment factory\n\n\nepisodes\nint\nEvaluation episodes\n\n\nnoise\nfloat\nObservation noise [0,1]\n\n\nnoise_action\nfloat\nAction noise [0,1]\n\n\nhorizon\nint\nMax steps (288 = 24h)\n\n\ntrack_metrics\nlist[str]\nMetrics to track¹\n\n\n\n¹ Options: 'satisfaction', 'components', 'actions', 'trajectory', 'demands'\nExample:\nmean_ret, std_ret, mean_cost, metrics = evaluate_policy(\n    policy_fn=my_policy,\n    make_env_fn=make_env,\n    episodes=10,\n    track_metrics=['satisfaction']\n)\n\n\n\n\nGrid search over noise levels for robustness analysis.\nsweep_noise(\n    policy_fn: Callable,\n    make_env_fn: Callable,\n    Ns: Iterable[float] = (0.0, 0.05, 0.1, 0.2),\n    N_as: Iterable[float] = (0.0, 0.1),\n    episodes: int = 2,\n) -&gt; pd.DataFrame\nReturns: DataFrame with columns ['noise', 'noise_action', 'return_mean', 'return_std', 'safety_cost']\n\n\n\n\nComprehensive action distribution analysis.\nplot_action_distribution(\n    actions: Union[np.ndarray, Dict[str, np.ndarray]],\n    title: str = \"Action Distribution\",\n    show_saturation: bool = True,\n    saturation_thresholds: Tuple[float, float] = (0.001, 0.999),\n    return_stats: bool = True,\n) -&gt; Optional[Dict[str, float]]\nFeatures: - Histogram with KDE overlay - Saturation analysis (low/mid/high) - Statistical summary",
+    "crumbs": [
+      "Home",
+      "Core",
+      "EV Utilities"
+    ]
+  },
+  {
+    "objectID": "api/ev.html#core-functions",
+    "href": "api/ev.html#core-functions",
+    "title": "EV Utilities",
+    "section": "",
+    "text": "Comprehensive policy evaluation with metric tracking.\nevaluate_policy(\n    policy_fn: Callable[[Any], np.ndarray],\n    make_env_fn: Callable[..., object],\n    episodes: int = 2,\n    noise: Optional[float] = None,\n    noise_action: Optional[float] = None,\n    horizon: int = 288,\n    track_metrics: Optional[list[str]] = None,\n    verbose: bool = False,\n) -&gt; Tuple[float, float, float, Dict[str, Any]]\nParameters:\n\n\n\nName\nType\nDescription\n\n\n\n\npolicy_fn\nCallable\nMaps observations to actions\n\n\nmake_env_fn\nCallable\nEnvironment factory\n\n\nepisodes\nint\nEvaluation episodes\n\n\nnoise\nfloat\nObservation noise [0,1]\n\n\nnoise_action\nfloat\nAction noise [0,1]\n\n\nhorizon\nint\nMax steps (288 = 24h)\n\n\ntrack_metrics\nlist[str]\nMetrics to track¹\n\n\n\n¹ Options: 'satisfaction', 'components', 'actions', 'trajectory', 'demands'\nExample:\nmean_ret, std_ret, mean_cost, metrics = evaluate_policy(\n    policy_fn=my_policy,\n    make_env_fn=make_env,\n    episodes=10,\n    track_metrics=['satisfaction']\n)\n\n\n\n\nGrid search over noise levels for robustness analysis.\nsweep_noise(\n    policy_fn: Callable,\n    make_env_fn: Callable,\n    Ns: Iterable[float] = (0.0, 0.05, 0.1, 0.2),\n    N_as: Iterable[float] = (0.0, 0.1),\n    episodes: int = 2,\n) -&gt; pd.DataFrame\nReturns: DataFrame with columns ['noise', 'noise_action', 'return_mean', 'return_std', 'safety_cost']\n\n\n\n\nComprehensive action distribution analysis.\nplot_action_distribution(\n    actions: Union[np.ndarray, Dict[str, np.ndarray]],\n    title: str = \"Action Distribution\",\n    show_saturation: bool = True,\n    saturation_thresholds: Tuple[float, float] = (0.001, 0.999),\n    return_stats: bool = True,\n) -&gt; Optional[Dict[str, float]]\nFeatures: - Histogram with KDE overlay - Saturation analysis (low/mid/high) - Statistical summary",
+    "crumbs": [
+      "Home",
+      "Core",
+      "EV Utilities"
+    ]
+  },
+  {
+    "objectID": "api/ev.html#persistence-functions",
+    "href": "api/ev.html#persistence-functions",
+    "title": "EV Utilities",
+    "section": "Persistence Functions",
+    "text": "Persistence Functions\n\nsave_timeseries / load_timeseries\nsave_timeseries(tag: str, ts_df: pd.DataFrame, kind: str = \"rl\") -&gt; str\nload_timeseries(tag: str, kind: str = \"rl\") -&gt; pd.DataFrame\nCache locations: ./cache/{kind}/{tag}_timeseries.csv.gz\n\n\nsave_evaluation_results / load_evaluation_results\nsave_evaluation_results(\n    tag: str,\n    policy_name: str,\n    mean_return: float,\n    std_return: float,\n    mean_cost: float,\n    metrics: Dict[str, Any],\n    env_config: Optional[Dict] = None,\n    save_full_trajectory: bool = False,\n) -&gt; str",
+    "crumbs": [
+      "Home",
+      "Core",
+      "EV Utilities"
+    ]
+  },
+  {
+    "objectID": "api/ev.html#visualization-functions",
+    "href": "api/ev.html#visualization-functions",
+    "title": "EV Utilities",
+    "section": "Visualization Functions",
+    "text": "Visualization Functions\n\nplot_robustness_heatmap\nplot_robustness_heatmap(df: pd.DataFrame, value: str = \"return_mean\")\n\n\nplot_training_curves\nplot_training_curves(\n    data: Union[pd.DataFrame, Dict[str, pd.DataFrame]],\n    x: str = \"episode\",\n    y: str = \"reward\",\n    smoothing_window: int = 200,\n    band: str = \"std\",  # \"none\", \"std\", \"ci\", \"quantile\"\n)\n\n\nplot_critical_timeline\nplot_critical_timeline(\n    trajectory: Dict[str, np.ndarray],\n    env: Any,\n    critical_windows: Optional[list] = None,\n    topk: int = 3,\n)",
+    "crumbs": [
+      "Home",
+      "Core",
+      "EV Utilities"
+    ]
+  },
+  {
+    "objectID": "api/ev.html#experiment-management",
+    "href": "api/ev.html#experiment-management",
+    "title": "EV Utilities",
+    "section": "Experiment Management",
+    "text": "Experiment Management\n\nExperimentTracker\ntracker = ExperimentTracker(base_dir='./experiments')\ntracker.add_experiment(tag, config, results_df)\ntracker.compare_experiments(['exp1', 'exp2'])\n\n\nrun_scenario_sweep\nresults_df = run_scenario_sweep(\n    algorithms={'PPO': ppo_policy, 'SAC': sac_policy},\n    env_factory=make_env,\n    scenarios={'baseline': {}, 'noisy': {'env_kwargs': {'noise': 0.1}}},\n)",
+    "crumbs": [
+      "Home",
+      "Core",
+      "EV Utilities"
+    ]
+  },
+  {
+    "objectID": "api/ev.html#multi-agent-extensions",
+    "href": "api/ev.html#multi-agent-extensions",
+    "title": "EV Utilities",
+    "section": "Multi-Agent Extensions",
+    "text": "Multi-Agent Extensions\n\nevaluate_multi_agent_policy\nmean_ret, std_ret, mean_cost, metrics = evaluate_multi_agent_policy(\n    policy_fn=ma_policy,  # Dict[agent_id, obs] -&gt; Dict[agent_id, action]\n    make_env_fn=make_ma_env,\n    episodes=10,\n    track_metrics=['fairness', 'coordination'],\n)\n\n\nsave_marl_traj\nactions_path, ts_path = save_marl_traj(\n    tag=\"experiment_001\",\n    traj_actions={'agent_0': actions_0, 'agent_1': actions_1},\n    ts=timeseries_df,\n)",
+    "crumbs": [
+      "Home",
+      "Core",
+      "EV Utilities"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "GridGuardian-RL",
+    "section": "",
+    "text": "AI‑Driven Control Center\n      Human‑in‑the‑loop monitoring with safety envelopes, alarms, and resilient fallback strategies.\n      \n        Explore Tutorials\n        API Reference\n        GitHub\n      \n    \n  \n\n\n\n  Learn with Notebooks\n  Hands-on, self-paced notebooks to build intuition and skills.\n  \n    1. EV EnvironmentSetup, observations, actions, and dynamics.\n    2. BaselinesHeuristics, MPC, and operational tradeoffs.\n    3. Safe RLConstrained MDPs, shields, and safety envelopes.\n    4. DiagnosticsMetrics, saturation analysis, and stress tests.\n  \n  \n    Browse all Tutorials\n  \n\n\n\n  Inside the control loop\n  \n    DashboardsKPIs, constraint margins, and alarms.\n    Safe OverridesEmergency stop, recovery policies, and guardrails.\n    AuditabilityTrace decisions and reproduce episodes under uncertainty."
+  },
+  {
+    "objectID": "tutorials/ev/05-multi-agent.html",
+    "href": "tutorials/ev/05-multi-agent.html",
+    "title": "Tutorial 05: Multi-Agent Coordination",
+    "section": "",
+    "text": "This tutorial extends the EV charging problem to multi-agent settings where each charging station is controlled by an independent agent. The focus is on coordination strategies and fairness in decentralized control.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 05: Multi-Agent Coordination"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/05-multi-agent.html#overview",
+    "href": "tutorials/ev/05-multi-agent.html#overview",
+    "title": "Tutorial 05: Multi-Agent Coordination",
+    "section": "",
+    "text": "This tutorial extends the EV charging problem to multi-agent settings where each charging station is controlled by an independent agent. The focus is on coordination strategies and fairness in decentralized control.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 05: Multi-Agent Coordination"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/05-multi-agent.html#learning-objectives",
+    "href": "tutorials/ev/05-multi-agent.html#learning-objectives",
+    "title": "Tutorial 05: Multi-Agent Coordination",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\n\nImplement multi-agent EV charging environment with PettingZoo interface\nDevelop centralized training with decentralized execution (CTDE)\nApply Multi-Agent PPO (MAPPO) with shared critics\nDesign communication protocols between agents\nEvaluate fairness and coordination metrics",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 05: Multi-Agent Coordination"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/05-multi-agent.html#resources",
+    "href": "tutorials/ev/05-multi-agent.html#resources",
+    "title": "Tutorial 05: Multi-Agent Coordination",
+    "section": "Resources",
+    "text": "Resources\n\nJupyter Notebook\nView on GitHub\n\n\nSupporting Materials\n\nPython Script - Jupytext paired version\nTechnical Notes - MARL theory",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 05: Multi-Agent Coordination"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/05-multi-agent.html#key-concepts",
+    "href": "tutorials/ev/05-multi-agent.html#key-concepts",
+    "title": "Tutorial 05: Multi-Agent Coordination",
+    "section": "Key Concepts",
+    "text": "Key Concepts\n\nPartial Observability: Agents observe local station states\nShared Rewards: Global objective with individual credit assignment\nCommunication: Information exchange protocols (broadcast, targeted)\nFairness Metrics: Gini coefficient and coordination measures",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 05: Multi-Agent Coordination"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/05-multi-agent.html#prerequisites",
+    "href": "tutorials/ev/05-multi-agent.html#prerequisites",
+    "title": "Tutorial 05: Multi-Agent Coordination",
+    "section": "Prerequisites",
+    "text": "Prerequisites\nfrom envs.evcharging.multiagent_env import MultiAgentEVChargingEnv\nfrom tutorials.utils.marl import evaluate_multi_agent_policy, plot_agent_coordination_matrix",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 05: Multi-Agent Coordination"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/05-multi-agent.html#duration",
+    "href": "tutorials/ev/05-multi-agent.html#duration",
+    "title": "Tutorial 05: Multi-Agent Coordination",
+    "section": "Duration",
+    "text": "Duration\nApproximately 90 minutes",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 05: Multi-Agent Coordination"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/05-multi-agent.html#acknowledgments",
+    "href": "tutorials/ev/05-multi-agent.html#acknowledgments",
+    "title": "Tutorial 05: Multi-Agent Coordination",
+    "section": "Acknowledgments",
+    "text": "Acknowledgments\nBased on MAPPO (Yu et al., 2021) and PettingZoo framework for multi-agent environments.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 05: Multi-Agent Coordination"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/01-environment.html",
+    "href": "tutorials/ev/01-environment.html",
+    "title": "Tutorial 01: Environment and Safety",
+    "section": "",
+    "text": "This tutorial introduces the EV charging environment and its safety mechanisms. You will learn how the environment models real-world charging infrastructure constraints and how actions are projected to maintain network safety.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 01: Environment and Safety"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/01-environment.html#overview",
+    "href": "tutorials/ev/01-environment.html#overview",
+    "title": "Tutorial 01: Environment and Safety",
+    "section": "",
+    "text": "This tutorial introduces the EV charging environment and its safety mechanisms. You will learn how the environment models real-world charging infrastructure constraints and how actions are projected to maintain network safety.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 01: Environment and Safety"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/01-environment.html#learning-objectives",
+    "href": "tutorials/ev/01-environment.html#learning-objectives",
+    "title": "Tutorial 01: Environment and Safety",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\n\nUnderstand the observation and action spaces\nExplore network constraint formulation\nImplement safety projections using convex optimization\nAnalyze the impact of Marginal Operating Emissions Rate (MOER)\nVisualize constraint binding patterns",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 01: Environment and Safety"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/01-environment.html#resources",
+    "href": "tutorials/ev/01-environment.html#resources",
+    "title": "Tutorial 01: Environment and Safety",
+    "section": "Resources",
+    "text": "Resources\n\nJupyter Notebook\nView on GitHub\n\n\nSupporting Materials\n\nPython Script - Jupytext paired version\nTechnical Notes - Extended documentation",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 01: Environment and Safety"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/01-environment.html#key-concepts",
+    "href": "tutorials/ev/01-environment.html#key-concepts",
+    "title": "Tutorial 01: Environment and Safety",
+    "section": "Key Concepts",
+    "text": "Key Concepts\n\nConstraint Projection: Actions are projected onto feasible set via quadratic programming\nNetwork Safety: Transformer and feeder capacity limits enforced at each step\nMOER Integration: Real-time carbon intensity affects reward calculation",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 01: Environment and Safety"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/01-environment.html#prerequisites",
+    "href": "tutorials/ev/01-environment.html#prerequisites",
+    "title": "Tutorial 01: Environment and Safety",
+    "section": "Prerequisites",
+    "text": "Prerequisites\nfrom envs.evcharging.env import EVChargingEnv\nfrom data.load_moer import load_moer_data\nimport cvxpy as cp",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 01: Environment and Safety"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/01-environment.html#duration",
+    "href": "tutorials/ev/01-environment.html#duration",
+    "title": "Tutorial 01: Environment and Safety",
+    "section": "Duration",
+    "text": "Duration\nApproximately 30 minutes",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 01: Environment and Safety"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/01-environment.html#acknowledgments",
+    "href": "tutorials/ev/01-environment.html#acknowledgments",
+    "title": "Tutorial 01: Environment and Safety",
+    "section": "Acknowledgments",
+    "text": "Acknowledgments\nThis tutorial uses data from the Caltech ACN Portal and California ISO MOER dataset.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 01: Environment and Safety"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/02-baselines.html",
+    "href": "tutorials/ev/02-baselines.html",
+    "title": "Tutorial 02: Baseline Controllers",
+    "section": "",
+    "text": "This tutorial implements and evaluates baseline control strategies for EV charging. These baselines serve as performance benchmarks for reinforcement learning algorithms and provide insight into the problem structure.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 02: Baseline Controllers"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/02-baselines.html#overview",
+    "href": "tutorials/ev/02-baselines.html#overview",
+    "title": "Tutorial 02: Baseline Controllers",
+    "section": "",
+    "text": "This tutorial implements and evaluates baseline control strategies for EV charging. These baselines serve as performance benchmarks for reinforcement learning algorithms and provide insight into the problem structure.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 02: Baseline Controllers"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/02-baselines.html#learning-objectives",
+    "href": "tutorials/ev/02-baselines.html#learning-objectives",
+    "title": "Tutorial 02: Baseline Controllers",
+    "section": "Learning Objectives",
+    "text": "Learning Objectives\n\nImplement greedy and random baseline controllers\nDevelop Model Predictive Control (MPC) with rolling horizon optimization\nCompute offline optimal solution with perfect information\nCompare controller performance across multiple metrics\nEstablish trajectory logging and caching infrastructure",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 02: Baseline Controllers"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/02-baselines.html#resources",
+    "href": "tutorials/ev/02-baselines.html#resources",
+    "title": "Tutorial 02: Baseline Controllers",
+    "section": "Resources",
+    "text": "Resources\n\nJupyter Notebook\nView on GitHub\n\n\nSupporting Materials\n\nPython Script - Jupytext paired version\nTechnical Notes - Implementation details",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 02: Baseline Controllers"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/02-baselines.html#key-algorithms",
+    "href": "tutorials/ev/02-baselines.html#key-algorithms",
+    "title": "Tutorial 02: Baseline Controllers",
+    "section": "Key Algorithms",
+    "text": "Key Algorithms\n\nGreedy: Maximizes immediate reward without lookahead\nRandom: Uniform random actions for statistical baseline\nMPC: Solves finite-horizon optimization problem at each step\nOffline Optimal: Solves entire episode with perfect future knowledge",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 02: Baseline Controllers"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/02-baselines.html#prerequisites",
+    "href": "tutorials/ev/02-baselines.html#prerequisites",
+    "title": "Tutorial 02: Baseline Controllers",
+    "section": "Prerequisites",
+    "text": "Prerequisites\nfrom algorithms.evcharging.baselines import GreedyPolicy, MPCPolicy, OfflineOptimal\nfrom tutorials.utils import save_timeseries, evaluate_policy",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 02: Baseline Controllers"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/02-baselines.html#duration",
+    "href": "tutorials/ev/02-baselines.html#duration",
+    "title": "Tutorial 02: Baseline Controllers",
+    "section": "Duration",
+    "text": "Duration\nApproximately 45 minutes",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 02: Baseline Controllers"
+    ]
+  },
+  {
+    "objectID": "tutorials/ev/02-baselines.html#acknowledgments",
+    "href": "tutorials/ev/02-baselines.html#acknowledgments",
+    "title": "Tutorial 02: Baseline Controllers",
+    "section": "Acknowledgments",
+    "text": "Acknowledgments\nMPC implementation based on convex optimization formulations from Lee et al. (2019) ACN research.",
+    "crumbs": [
+      "Home",
+      "EV Charging",
+      "Tutorial 02: Baseline Controllers"
+    ]
+  }
+]
