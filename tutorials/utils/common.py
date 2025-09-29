@@ -224,7 +224,7 @@ def create_ev_env(
     # Allow overrides via env_kwargs without passing duplicate keywords
     env_kwargs = dict(env_kwargs)  # shallow copy to avoid side effects
     env_kwargs.setdefault('moer_forecast_steps', 36)
-    env_kwargs.setdefault('project_action_in_env', True)
+    env_kwargs.setdefault('project_action_in_env', False)
 
     env = EVChargingEnv(
         data_generator=gen,
@@ -256,7 +256,7 @@ def create_ma_ev_env(
     date_range: Tuple[str, str] = ('2019-05-01', '2019-05-31'),
     seed: int = 42,
     moer_forecast_steps: int = 36,
-    project_action_in_env: bool = True,
+    project_action_in_env: bool = False,
     periods_delay: int = 0,
     dense_mode: bool = False,
     density_multiplier: float = 3.0,

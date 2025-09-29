@@ -12,6 +12,7 @@ import copy
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from gymnasium import spaces
 from collections import defaultdict
 from .common import wrap_policy, wrap_ma_policy
 from .notebook import log_info, log_warning, log_error, log_success, show, show_metrics
@@ -259,11 +260,17 @@ def evaluate_policy(
     except TypeError:
         # Fall back to calling without kwargs if the factory doesn't accept them
         env = make_env_fn()
+    # Ensure we expose observed (post-projection) excess-cost per step during evaluation when possible
+    try:
+        env = ObservedExcessCostWrapper(env)
+    except Exception:
+        pass
 
     if track_metrics is None:
         track_metrics = []
 
     returns, costs = [], []
+    observed_costs = []
     metrics: Dict[str, list] = defaultdict(list)
 
     for ep in range(episodes):
@@ -275,6 +282,7 @@ def evaluate_policy(
         obs, info = env.reset(seed=(reset_seed if reset_seed is not None else ep))
         done = False
         ep_ret, ep_cost = 0.0, 0.0
+        ep_obs_cost = 0.0
         t = 0
         # Track last cumulative excess charge to compute per-step cost when SafetyWrapper not used
         last_excess_cum = 0.0
@@ -325,6 +333,13 @@ def evaluate_policy(
                 step_cost = max(0.0, ex_cum - last_excess_cum)
                 last_excess_cum = ex_cum
             ep_cost += float(step_cost)
+            # Track observed (post-projection) per-step cost if provided by a wrapper
+            try:
+                obs_step = info.get('observed_excess_step', None)
+                if obs_step is not None:
+                    ep_obs_cost += float(obs_step)
+            except Exception:
+                pass
 
             # Track components if requested (store series and aggregate post-episode)
             if 'components' in track_metrics:
@@ -346,6 +361,7 @@ def evaluate_policy(
         # Store episode results
         returns.append(ep_ret)
         costs.append(ep_cost)
+        observed_costs.append(ep_obs_cost)
 
         # Calculate episode-level demand totals if needed
         if (('satisfaction' in track_metrics) or ('demands' in track_metrics)) and ep_demands_initial:
@@ -455,6 +471,7 @@ def evaluate_policy(
     # Episode-level aggregates useful for downstream safety analysis
     aggregated_metrics['episode_returns'] = list(map(float, returns))
     aggregated_metrics['episode_costs'] = list(map(float, costs))
+    aggregated_metrics['episode_observed_costs'] = list(map(float, observed_costs))
 
     return float(np.mean(returns)), float(np.std(returns)), float(np.mean(costs)), aggregated_metrics
 
@@ -1181,6 +1198,18 @@ def evaluate_multi_agent_policy(
         last_cum_cost: Dict[str, float] = defaultdict(float)
         # Collect actions per agent for coordination
         actions_over_time: list[list[float]] = [[] for _ in agent_ids]  # index-aligned with agent_ids
+        # Service tracking: delivered and requested energy proxies from demand deltas
+        delivered_per_agent: Dict[str, float] = defaultdict(float)
+        remaining_demand_per_agent: Dict[str, float] = defaultdict(float)
+        # Access dict observation spaces for unflattening
+        dict_spaces = getattr(env, '_dict_observation_spaces', {})
+        # Stable agent index mapping to pick the correct slot from the 'demands' vector
+        try:
+            env_agent_order = list(getattr(env, 'agents', agent_ids))
+        except Exception:
+            env_agent_order = list(agent_ids)
+        aid_to_idx = {aid: (env_agent_order.index(aid) if aid in env_agent_order else i)
+                      for i, aid in enumerate(agent_ids)}
 
         done = False
         t = 0
@@ -1206,6 +1235,28 @@ def evaluate_multi_agent_policy(
                     agent_costs[aid] += inc
                     last_cum_cost[aid] = cum
 
+                # Service accounting via demand delta at the agent's own slot (proxy for delivered energy)
+                for aid in agent_ids:
+                    try:
+                        sp = dict_spaces.get(aid)
+                        if sp is None:
+                            continue
+                        prev_dict = spaces.unflatten(sp, obs_dict.get(aid))
+                        next_dict = spaces.unflatten(sp, obs_next.get(aid))
+                        prev_dem = np.asarray(prev_dict.get('demands', np.array([])), dtype=float).reshape(-1)
+                        next_dem = np.asarray(next_dict.get('demands', np.array([])), dtype=float).reshape(-1)
+                        if prev_dem.size == 0 or next_dem.size == 0:
+                            continue
+                        j = min(max(0, aid_to_idx.get(aid, 0)), prev_dem.size - 1)
+                        prev_v = float(prev_dem[j]) if prev_dem[j] > 0 else 0.0
+                        next_v = float(next_dem[j]) if next_dem[j] > 0 else 0.0
+                        delivered_step = max(0.0, prev_v - next_v)
+                        delivered_per_agent[aid] += delivered_step
+                        remaining_demand_per_agent[aid] = next_v
+                    except Exception:
+                        # Best-effort; skip if unflattening or indexing not available
+                        continue
+
                 # Termination when all agents done
                 done = (len(terms) > 0 and all(bool(v) for v in terms.values())) or \
                        (len(truncs) > 0 and all(bool(v) for v in truncs.values()))
@@ -1223,22 +1274,42 @@ def evaluate_multi_agent_policy(
         ep_returns.append(mean_ep_return)
         ep_costs.append(mean_ep_cost)
 
-        # Additional metrics
-        if 'fairness' in track_metrics:
-            rvals = np.array(list(agent_rewards.values()), dtype=float)
-            if rvals.size > 0:
-                total = float(np.sum(rvals))
-                if total <= 1e-12:
-                    fairness = 1.0
-                else:
-                    sorted_rvals = np.sort(rvals)
-                    n = len(sorted_rvals)
-                    index = np.arange(1, n + 1, dtype=float)
-                    gini = (2.0 * float(np.sum(index * sorted_rvals))) / (n * total) - (n + 1.0) / n
-                    fairness = 1.0 - float(gini)
+        # Additional metrics (service-oriented fairness)
+        # Compute per-agent requested = delivered + remaining (episode end)
+        aids_list = list(agent_ids)
+        delivered_vec = np.array([float(delivered_per_agent.get(aid, 0.0)) for aid in aids_list], dtype=float)
+        remaining_vec = np.array([float(remaining_demand_per_agent.get(aid, 0.0)) for aid in aids_list], dtype=float)
+        requested_vec = delivered_vec + remaining_vec
+
+        # Consider only agents with any demand during the episode
+        active_mask = requested_vec > 1e-9
+        d_active = delivered_vec[active_mask]
+        r_active = requested_vec[active_mask]
+
+        # Jain's index over delivered energy among agents with demand
+        if d_active.size > 0:
+            num = float(np.sum(d_active)) ** 2
+            den = float(d_active.size) * float(np.sum(d_active ** 2))
+            service_fairness_jain = (num / den) if den > 1e-12 else 1.0
+        else:
+            service_fairness_jain = 1.0
+        metrics['service_fairness_jain'].append(float(service_fairness_jain))
+
+        # Gini over delivered/requested ratios (inequality), reported as fairness = 1 - gini
+        if r_active.size > 0:
+            ratios = d_active / np.clip(r_active, 1e-9, None)
+            ratios_sorted = np.sort(ratios)
+            n = ratios_sorted.size
+            cumindex = np.arange(1, n + 1, dtype=float)
+            denom = n * float(np.sum(ratios_sorted))
+            if denom <= 1e-12:
+                gini = 0.0
             else:
-                fairness = 1.0
-            metrics['fairness'].append(fairness)
+                gini = (2.0 * float(np.sum(cumindex * ratios_sorted)) / denom) - (n + 1.0) / n
+            service_ratio_fairness = 1.0 - float(gini)
+        else:
+            service_ratio_fairness = 1.0
+        metrics['service_ratio_fairness'].append(float(service_ratio_fairness))
 
         if 'coordination' in track_metrics:
             # Build [T, N] action matrix and compute mean |corr| off-diagonal
@@ -2217,9 +2288,10 @@ def plot_algorithm_comparison_matrix(
         'satisfaction': 'satisfaction_mean',
         'profit': 'profit_mean',
         'carbon': 'carbon_cost_mean',
-        'fairness': 'fairness_mean',
+        # Backward-compatibility: map to service-oriented fairness metrics
+        'fairness': 'service_fairness_jain_mean',
         'coordination': 'coordination_mean',
-        'action_fairness': 'action_fairness_mean',
+        'action_fairness': 'service_ratio_fairness_mean',
     }
     resolved_metrics = [metric_map.get(m, m) for m in metrics]
 

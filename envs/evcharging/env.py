@@ -241,11 +241,56 @@ class EVChargingEnv(Env):
             projected_action: array of shape [num_stations], still a normalized
                 charging rate in [0, 1]
         """
-        self._projected_action.value = action  # initialize value for faster convergence
-        self._agent_action.value = action
+        # Initialize parameter values and provide a warm start
+        x0 = np.clip(np.asarray(action, dtype=float).reshape(-1), 0.0, 1.0)
+        self._projected_action.value = x0  # warm start for faster convergence
+        self._agent_action.value = x0
         self._demands_cvx.value = self._demands
-        action = self._projected_action.value
-        return action
+
+        # Try to solve the projection problem; fall back to a safe heuristic if needed
+        try:
+            # Prefer MOSEK when available; otherwise use ECOS
+            try:
+                solve_mosek(self.prob, verbose=False)
+            except Exception:
+                self.prob.solve(solver=cp.ECOS, warm_start=True, verbose=False)
+
+            x = self._projected_action.value
+            if x is None:
+                raise RuntimeError("Projection solver returned None")
+            x = np.asarray(x, dtype=float).reshape(-1)
+        except Exception:
+            # Heuristic fallback:
+            # 1) cap by per-port demand-implied maximum (normalized)
+            with np.errstate(divide='ignore', invalid='ignore'):
+                cap = np.minimum(
+                    1.0,
+                    np.divide(
+                        self._demands,
+                        self.A_PERS_TO_KWH * self.ACTION_SCALE_FACTOR,
+                        out=np.ones_like(self._demands),
+                        where=(self.A_PERS_TO_KWH * self.ACTION_SCALE_FACTOR) > 0,
+                    ),
+                )
+            x = np.minimum(x0, cap)
+            x = np.clip(x, 0.0, 1.0)
+
+            # 2) scale down uniformly to satisfy network magnitude constraints
+            try:
+                phase_factor = np.exp(1j * np.deg2rad(self.cn._phase_angles))
+                A_tilde = self.cn.constraint_matrix * phase_factor[None, :]
+                agg = np.abs(A_tilde @ x) * self.ACTION_SCALE_FACTOR
+                # Compute the worst-case ratio to limits; if >1, scale down
+                denom = np.maximum(self.cn.magnitudes, 1e-9)
+                ratio = agg / denom
+                max_ratio = float(np.max(ratio)) if ratio.size else 0.0
+                if max_ratio > 1.0:
+                    x = x / (max_ratio + 1e-6)
+            except Exception:
+                # If any issue arises, keep the capped vector
+                pass
+
+        return np.clip(x, 0.0, 1.0)
 
     def __repr__(self) -> str:
         """Returns the string representation of charging gym."""
